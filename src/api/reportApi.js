@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://10.205.165.151:8080/api/reports";
+const API_URL = "https://sankalp-backend-r2sj.onrender.com";
 
 // Get all reports
 export const getReports = () => axios.get(API_URL);
