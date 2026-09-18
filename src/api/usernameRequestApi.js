@@ -30,4 +30,4 @@ export const updateUsernameRequest = async (id, request) => {
 };
 
 export const deleteAllUsernameRequests = () =>
-  axios.delete("http://localhost:8080/api/username-request/delete-all");
+  axios.delete("https://sankalp-backend-r2sj.onrender.com/api/username-request/delete-all");
