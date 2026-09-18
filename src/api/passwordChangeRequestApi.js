@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://10.205.165.151:8080/api/password-change";
+const API_URL = "https://sankalp-backend-r2sj.onrender.com";
 
 export const createPasswordChangeRequest = (request) => {
     return axios.post(API_URL, request);
