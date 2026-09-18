@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://10.205.165.151:8080/api/otp";
+const API = "https://sankalp-backend-r2sj.onrender.com";
 
 export const sendOtp = (employeeId) => {
   return axios.post(`${API}/send`, {
