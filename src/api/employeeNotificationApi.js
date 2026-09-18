@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://10.205.165.151:8080/api/employee/notifications";
+const BASE_URL = "https://sankalp-backend-r2sj.onrender.com";
 
 // Get all notifications
 export const getNotifications = () => {
