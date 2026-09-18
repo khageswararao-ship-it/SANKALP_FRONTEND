@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://10.205.165.151:8080",
+  baseURL: "https://sankalp-backend-r2sj.onrender.com",
 });
 
 // Pass employeeId to backend
