@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://sankalp-backend-r2sj.onrender.com"
+  baseURL: "https://sankalp-backend-r2sj.onrender.com",
 });
 
 export const getEmployees = () => API.get("/employees");
