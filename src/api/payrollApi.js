@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://sankalp-backend-r2sj.onrender.com";
+const API_URL = "https://sankalp-backend-r2sj.onrender.com/api/payroll";
 
 export const getPayroll = () => axios.get(API_URL);
 

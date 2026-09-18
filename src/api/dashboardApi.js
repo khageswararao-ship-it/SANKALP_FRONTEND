@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://sankalp-backend-r2sj.onrender.com";
+
 export const getEmployees = () =>
   axios.get(`${BASE_URL}/api/admin/employees`);
 
