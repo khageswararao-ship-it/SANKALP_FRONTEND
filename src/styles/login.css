@@ -1,0 +1,138 @@
+.login-container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-size:cover;
+    background-position:center;
+}
+
+.login-card{
+    width:380px;
+    background:rgba(255,255,255,0.95);
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.login-logo{
+    width:90px;
+    margin-bottom:15px;
+}
+
+.login-card h1{
+    color:#1e3a8a;
+}
+
+.login-card p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.login-card input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.login-card button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#1e3a8a;
+    color:white;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.login-card button:hover{
+    background:#2563eb;
+}
+
+.login-select{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+    cursor:pointer;
+}
+
+/* ============================= */
+/* Tablet (768px and below) */
+/* ============================= */
+
+@media screen and (max-width: 768px) {
+
+    .login-card {
+        width: 90%;
+        max-width: 400px;
+        padding: 30px;
+    }
+
+    .login-logo {
+        width: 80px;
+    }
+
+    .login-card h1 {
+        font-size: 28px;
+    }
+
+    .login-card p {
+        font-size: 15px;
+    }
+
+    .login-card input,
+    .login-select,
+    .login-card button {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+/* ============================= */
+/* Mobile (480px and below) */
+/* ============================= */
+
+@media screen and (max-width: 480px) {
+
+    .login-container {
+        padding: 20px;
+    }
+
+    .login-card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .login-logo {
+        width: 70px;
+    }
+
+    .login-card h1 {
+        font-size: 24px;
+    }
+
+    .login-card p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .login-card input,
+    .login-select,
+    .login-card button {
+        width: 100%;
+        font-size: 15px;
+        padding: 12px;
+        box-sizing: border-box;
+    }
+}

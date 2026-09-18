@@ -1,0 +1,47 @@
+.settings-card{
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.settings-card h2{
+    margin-bottom:25px;
+}
+
+.setting-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid #eee;
+}
+
+.setting-row:last-child{
+    border-bottom:none;
+}
+
+.setting-btn{
+    background:#1E88E5;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.setting-btn:hover{
+    background:#1565C0;
+}
+
+.setting-row select{
+    padding:8px 12px;
+    border-radius:8px;
+}
+
+.setting-row input[type="checkbox"]{
+    width:20px;
+    height:20px;
+    cursor:pointer;
+}
