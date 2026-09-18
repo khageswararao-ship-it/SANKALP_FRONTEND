@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://10.205.165.151:8080/leave";
+const API_URL = "https://sankalp-backend-r2sj.onrender.com";
 
 export const getLeave = () => axios.get(API_URL);
 
