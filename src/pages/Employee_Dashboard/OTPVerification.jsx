@@ -39,20 +39,8 @@ const handleVerify = async () => {
 
   setLoading(true);
 
-  // Universal instant fallback so employees never get locked out
-  if (otp === "123456") {
-    setMessage("✅ OTP Verified Successfully.");
-    const employeeId = localStorage.getItem("employeeId") || "EMP1";
-    verifyOtp(employeeId, otp).catch(() => {});
-    setLoading(false);
-    setTimeout(() => {
-      navigate("/employee/dashboard");
-    }, 800);
-    return;
-  }
-
   try {
-    const employeeId = localStorage.getItem("employeeId") || "EMP1";
+    const employeeId = localStorage.getItem("employeeId");
     const response = await verifyOtp(employeeId, otp);
     setLoading(false);
 
@@ -62,13 +50,13 @@ const handleVerify = async () => {
         navigate("/employee/dashboard");
       }, 1000);
     } else {
-      setMessage("❌ Invalid OTP. Enter 123456 for instant login.");
+      setMessage("❌ Invalid or expired OTP. Please check your email.");
     }
 
   } catch (error) {
     console.error(error);
     setLoading(false);
-    setMessage("❌ Verification Failed. Enter 123456 for instant login.");
+    setMessage("❌ Verification Failed. Please try again.");
   }
 
 };
@@ -81,7 +69,7 @@ const handleVerify = async () => {
 
         setOtp("");
         setTimer(30);
-        setMessage("✅ New OTP has been sent to your email.");
+        setMessage("📩 New OTP has been sent to your email.");
       } catch (error) {
         console.error(error);
         setMessage("❌ Failed to send OTP.");
@@ -98,7 +86,7 @@ const handleVerify = async () => {
             <h2>Verify Your Identity</h2>
 
             <p>
-              Enter the 6-digit OTP sent to your registered email (or enter <strong>123456</strong>).
+              Enter the 6-digit OTP sent to your registered email address.
             </p>
 
             <input
