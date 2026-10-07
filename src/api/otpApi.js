@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const API = "https://sankalp-backend-r2sj.onrender.com/api/otp";
+const API = `${API_BASE_URL}/api/otp`;
 
 export const sendOtp = (employeeId) => {
   return axios.post(`${API}/send`, {

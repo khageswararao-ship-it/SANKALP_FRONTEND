@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const API_URL = "https://sankalp-backend-r2sj.onrender.com/api/username-request";
+const API_URL = `${API_BASE_URL}/api/username-request`;
 
 
 export const approveUsernameRequest = (id) => {
@@ -30,4 +31,4 @@ export const updateUsernameRequest = async (id, request) => {
 };
 
 export const deleteAllUsernameRequests = () =>
-  axios.delete("https://sankalp-backend-r2sj.onrender.com/api/username-request/delete-all");
+  axios.delete(`${API_BASE_URL}/api/username-request/delete-all`);

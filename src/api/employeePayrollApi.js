@@ -1,7 +1,8 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://sankalp-backend-r2sj.onrender.com/api/payroll",
+  baseURL: `${API_BASE_URL}/api/payroll`,
 });
 
 export const getPayroll = (employeeId) =>

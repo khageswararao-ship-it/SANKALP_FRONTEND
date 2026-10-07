@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const API_URL = "https://sankalp-backend-r2sj.onrender.com/api/employee-dashboard";
+const API_URL = `${API_BASE_URL}/api/employee-dashboard`;
 
 export const getEmployeeDashboard = (id) => {
   return axios.get(`${API_URL}/${id}`);

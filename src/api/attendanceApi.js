@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const API_URL = "https://sankalp-backend-r2sj.onrender.com";
+const API_URL = API_BASE_URL;
 
 export const getAttendance = () => {
   return axios.get(`${API_URL}/attendance`);

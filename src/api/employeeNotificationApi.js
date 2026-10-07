@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const BASE_URL = "https://sankalp-backend-r2sj.onrender.com/api/employee/notifications";
+const BASE_URL = `${API_BASE_URL}/api/employee/notifications`;
 
 // Get all notifications
 export const getNotifications = () => {

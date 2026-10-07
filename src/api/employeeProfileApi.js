@@ -1,6 +1,7 @@
+import { API_BASE_URL } from "./apiConfig";
 import axios from "axios";
 
-const BASE_URL = "https://sankalp-backend-r2sj.onrender.com/api/employee/profile";
+const BASE_URL = `${API_BASE_URL}/api/employee/profile`;
 
 // Get Profile
 export const getEmployeeProfile = (employeeId) => {
