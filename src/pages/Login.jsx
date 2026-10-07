@@ -47,11 +47,10 @@ const handleLogin = async () => {
         
         console.log("Saved Employee ID:", localStorage.getItem("employeeId"));
 
-        try {
-          await sendOtp(user.employeeId);
-        } catch (otpError) {
-          console.warn("Could not dispatch OTP email, continuing to OTP screen:", otpError);
-        }
+        // Send OTP in background without blocking screen navigation
+        sendOtp(user.employeeId).catch((otpError) => {
+          console.warn("Could not dispatch OTP email:", otpError);
+        });
 
         navigate("/employee/otp");
       }
