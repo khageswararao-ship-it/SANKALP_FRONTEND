@@ -5,3 +5,7 @@ dist
 .env
 .env.local
 .DS_Store
+.gradle
+android/.gradle
+android/build
+android/app/build

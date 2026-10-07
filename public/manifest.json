@@ -1,0 +1,17 @@
+{
+  "name": "Sankalp IP HRMS",
+  "short_name": "Sankalp IP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f2c66",
+  "theme_color": "#1E88E5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

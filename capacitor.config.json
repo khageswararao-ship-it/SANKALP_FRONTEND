@@ -1,0 +1,9 @@
+{
+  "appId": "com.sankalp.hrms",
+  "appName": "Sankalp IP HRMS",
+  "webDir": "dist",
+  "server": {
+    "url": "https://sankalp-frontend-kohl.vercel.app",
+    "cleartext": true
+  }
+}
