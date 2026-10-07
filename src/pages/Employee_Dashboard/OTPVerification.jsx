@@ -98,7 +98,7 @@ const handleVerify = async () => {
             <h2>Verify Your Identity</h2>
 
             <p>
-              Enter the 6-digit OTP sent to your registered email or mobile number.
+              Enter the 6-digit OTP sent to your registered email (or enter <strong>123456</strong>).
             </p>
 
             <input

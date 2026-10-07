@@ -47,12 +47,17 @@ const handleLogin = async () => {
         
         console.log("Saved Employee ID:", localStorage.getItem("employeeId"));
 
-        await sendOtp(user.employeeId);
+        try {
+          await sendOtp(user.employeeId);
+        } catch (otpError) {
+          console.warn("Could not dispatch OTP email, continuing to OTP screen:", otpError);
+        }
 
         navigate("/employee/otp");
       }
   } catch (error) {
     console.error("Login Error:", error);
+    alert("Login failed. Please check your credentials or network.");
   }
 };
 
