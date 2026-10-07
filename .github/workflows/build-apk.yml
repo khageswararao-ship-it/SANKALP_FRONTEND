@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm ci || npm install
+        run: npm install
 
       - name: Build Web Application
         run: npm run build
@@ -34,9 +34,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Sync Capacitor Android
         run: npx cap sync android
 
@@ -44,6 +41,8 @@ jobs:
         run: chmod +x android/gradlew
 
       - name: Build Android APK
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
         run: |
           cd android
           ./gradlew assembleDebug --stacktrace
