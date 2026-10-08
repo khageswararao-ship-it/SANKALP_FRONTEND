@@ -67,3 +67,14 @@
     padding:5px 12px;
     border-radius:20px;
 }
+
+@media(max-width: 600px){
+    .table-header{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .search-input{
+        width: 100%;
+    }
+}

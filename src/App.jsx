@@ -52,12 +52,13 @@ import MyLeave from "./pages/Employee_Dashboard/MyLeave";
 import MyPayroll from "./pages/Employee_Dashboard/MyPayroll";
 import EmployeeSettings from "./pages/Employee_Dashboard/Settings";
 import OTPVerification from "./pages/Employee_Dashboard/OTPVerification";
-
+import { SidebarProvider } from "./context/SidebarContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <SidebarProvider>
+        <Routes>
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Login */}
@@ -146,6 +147,7 @@ function App() {
         <Route path="/employee/otp" element={<OTPVerification />}/>
 
       </Routes>
+      </SidebarProvider>
     </BrowserRouter>
   );
 }

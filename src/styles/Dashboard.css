@@ -1,141 +1,341 @@
-.dashboard-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:25px;
-    width:100%;
+/* ==========================================================================
+   DASHBOARD, METRICS, CHARTS & RESPONSIVE DATA TABLES
+   ========================================================================== */
+
+/* Page Title */
+.page-title {
+  color: #1E3A5F;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.3px;
 }
 
-@media(max-width:1200px){
-    .dashboard-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-@media(max-width:700px){
-    .dashboard-grid{
-        grid-template-columns:1fr;
-    }
+/* ==========================================================================
+   METRIC / KPI CARDS GRID
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-card {
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 18px 20px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  transition: 0.3s;
+  gap: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-.dashboard-card:hover{
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .card-icon {
-  font-size: 40px;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  background: rgba(30, 136, 229, 0.12);
+  color: #1E88E5;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .card-info h3 {
   margin: 0;
-  color: #555;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-info h2 {
-  margin-top: 8px;
-  font-size: 28px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.page-title{
-    color:#1E3A5F;
-    font-size:40px;
-    font-weight:700;
-    margin:0;
+/* Specific Card Accent Borders */
+.dashboard-card:nth-child(2) {
+  border-left: 4px solid #43A047;
 }
 
-/* ===========================
-   EMPLOYEES PAGE
-=========================== */
+.dashboard-card:nth-child(3) {
+  border-left: 4px solid #FB8C00;
+}
 
+.dashboard-card:nth-child(4) {
+  border-left: 4px solid #8E24AA;
+}
+
+/* ==========================================================================
+   CHARTS SECTION & STACKING ISOLATION
+   ========================================================================== */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.chart-card h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  color: #1E3A5F;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Strict Isolation for Recharts Layers to prevent overlapping navigation */
+.recharts-responsive-container {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.recharts-wrapper {
+  z-index: 1 !important;
+  max-width: 100% !important;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 20 !important;
+}
+
+/* ==========================================================================
+   RECENT ACTIVITIES SECTION
+   ========================================================================== */
+.recent-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.recent-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.recent-card h3 {
+  color: #1E3A5F;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.recent-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-card li {
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  font-size: 14px;
+}
+
+.recent-card li:last-child {
+  border-bottom: none;
+}
+
+.recent-card p {
+  margin: 12px 0;
+  font-size: 15px;
+  color: #334155;
+}
+
+.recent-card b {
+  color: #1565C0;
+}
+
+/* ==========================================================================
+   TOOLBAR (SEARCH, FILTERS, ACTIONS)
+   ========================================================================== */
 .employee-toolbar {
   display: flex;
-  gap: 15px;
-  margin: 25px 0;
+  gap: 12px;
+  margin: 15px 0 20px;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .search-box {
-  flex: 1;
-  min-width: 260px;
-  padding: 12px 15px;
-  border: none;
+  flex: 1 1 200px;
+  min-width: 160px;
+  padding: 11px 16px;
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
   outline: none;
-  background: rgba(255,255,255,0.9);
-  font-size: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  color: #0f172a;
+  transition: border-color 0.2s ease;
+}
+
+.search-box:focus {
+  border-color: #1E88E5;
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.15);
 }
 
 .filter-box {
-  padding: 12px;
-  border: none;
+  padding: 11px 14px;
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  color: #0f172a;
   cursor: pointer;
+  outline: none;
+  flex: 0 1 auto;
 }
 
 .add-btn {
-  padding: 12px 22px;
+  padding: 11px 20px;
   background: #1E88E5;
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.3s;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3);
 }
 
 .add-btn:hover {
   background: #1565C0;
+  transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   RESPONSIVE DATA TABLES (HORIZONTAL SCROLL ON MOBILE)
+   ========================================================================== */
 .table-container {
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-.employee-table {
+/* Smooth Horizontal Scrollbar */
+.table-container::-webkit-scrollbar {
+  height: 7px;
+}
+.table-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: rgba(30, 136, 229, 0.45);
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #1E88E5;
+}
+
+.employee-table,
+.admins-table,
+table {
   width: 100%;
+  min-width: 660px; /* Guarantees columns have breathing room and scroll cleanly on small screens */
   border-collapse: collapse;
 }
 
-.employee-table th {
+.employee-table th,
+.admins-table th,
+table th {
   background: #1E88E5;
   color: white;
-  padding: 16px;
+  padding: 14px 16px;
   text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.employee-table td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
+.employee-table td,
+.admins-table td,
+table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+  white-space: nowrap;
 }
 
-.employee-table tr:hover {
-  background: rgba(30,136,229,.05);
+.employee-table tr:hover,
+.admins-table tr:hover,
+table tr:hover {
+  background: rgba(30, 136, 229, 0.04);
 }
 
+/* Badges & Action Buttons */
 .status {
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 20px;
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  display: inline-block;
 }
 
 .status.active {
@@ -147,13 +347,15 @@
 }
 
 .action-btn {
-  padding: 8px 12px;
-  margin-right: 8px;
+  padding: 7px 12px;
+  margin-right: 6px;
   border: none;
-  border-radius: 8px;
+  border-radius: 7px;
   cursor: pointer;
   color: white;
   font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .action-btn.view {
@@ -170,214 +372,163 @@
 
 .action-btn:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.menu li.active {
-  background: rgba(255,255,255,0.18);
-  border-left: 5px solid #ffd54f;
-  font-weight: bold;
+/* ==========================================================================
+   POPUP MODALS & DIALOGS
+   ========================================================================== */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-.menu li:hover {
-  background: rgba(255,255,255,0.1);
+.popup-form {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+  z-index: 1201;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.popup-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.5);
-
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
+.popup-form h2 {
+  margin-top: 0;
+  margin-bottom: 6px;
+  color: #0f172a;
+  font-size: 20px;
 }
 
-.popup-form{
-    background:#fff;
-    padding:25px;
-    border-radius:12px;
-    width:400px;
-
-   
-    gap:15px;
+.popup-form input,
+.popup-form select,
+.popup-form textarea {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.popup-form input{
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:8px;
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
 }
 
-.popup-buttons{
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
 
-    justify-content:flex-end;
-    gap:10px;
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .recent-section {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 }
 
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 22px;
+  }
 
-/* ===========================
-   DASHBOARD CHARTS
-=========================== */
+  .dashboard-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
 
-.dashboard-charts{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
-    width:100%;
-    align-items:start;
+  .card-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    font-size: 22px;
+  }
+
+  .card-info h2 {
+    font-size: 22px;
+  }
+
+  .card-info h3 {
+    font-size: 13px;
+  }
+
+  .chart-card {
+    padding: 16px;
+  }
+
+  .recent-card {
+    padding: 16px;
+  }
 }
 
+@media (max-width: 500px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 
+  .dashboard-card {
+    padding: 12px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.chart-card{
-    background:rgba(255,255,255,.95);
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 12px 30px rgba(0,0,0,.12);
-    transition:.3s;
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 18px;
+  }
+
+  .card-info h2 {
+    font-size: 19px;
+  }
+
+  .card-info h3 {
+    font-size: 12px;
+  }
+
+  .employee-toolbar {
+    gap: 8px;
+  }
+
+  .search-box,
+  .filter-box,
+  .add-btn {
+    width: 100%;
+    flex: 1 1 100%;
+  }
 }
 
-.chart-card:hover{
-    transform:translateY(-6px);
-}
-
-.chart-card h3{
-    margin-bottom:20px;
-    color:#1E3A5F;
-    font-size:20px;
-    font-weight:600;
-}
-
-/* ===========================
-   RECENT SECTION
-=========================== */
-
-.recent-section{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:25px;
-    width:100%;
-}
-
-.recent-card{
-    background:#fff;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 10px 25px rgba(0,0,0,.1);
-}
-
-.recent-card h3{
-    color:#1E3A5F;
-    margin-bottom:18px;
-}
-
-.recent-card ul{
-    list-style:none;
-    padding:0;
-}
-
-.recent-card li{
-    padding:12px 0;
-    border-bottom:1px solid #ececec;
-    color:#555;
-}
-
-.recent-card li:last-child{
-    border-bottom:none;
-}
-
-.recent-card p{
-    margin:15px 0;
-    font-size:16px;
-}
-
-.recent-card b{
-    color:#1565C0;
-}
-
-/* ===========================
-   PAGE BACKGROUND
-=========================== */
-
-.page-content{
-    padding:30px;
-    display:flex;
-    flex-direction:column;
-    gap:35px;
-    width:100%;
-    box-sizing:border-box;
-}
-
-/* ===========================
-   CARD IMPROVEMENTS
-=========================== */
-
-
-
-.dashboard-card:nth-child(2){
-    border-left-color:#43A047;
-}
-
-.dashboard-card:nth-child(3){
-    border-left-color:#FB8C00;
-}
-
-.dashboard-card:nth-child(4){
-    border-left-color:#8E24AA;
-}
-
-.card-info h2{
-    font-size:34px;
-    font-weight:bold;
-    color:#1E3A5F;
-}
-
-.card-info h3{
-    color:#777;
-    font-size:16px;
-}
-
-.card-icon{
-    width:70px;
-    height:70px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border-radius:50%;
-    font-size:32px;
-}
-
-/* ===========================
-   MOBILE
-=========================== */
-
-@media(max-width:900px){
-
-.dashboard-charts{
-grid-template-columns:1fr;
-}
-
-.recent-section{
-grid-template-columns:1fr;
-}
-
-}
-
-.chart-card,
-.recent-card,
-.dashboard-card{
-    width:100%;
-    box-sizing:border-box;
-}
-
-.chart-card{
-    min-height:420px;
-}
-
-.recent-card{
-    min-height:260px;
-}
-
-.dashboard-card{
-    min-height:120px;
+@media (max-width: 340px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -52,3 +52,13 @@
     padding:6px 12px;
     border-radius:20px;
 }
+
+@media(max-width:768px){
+    .leave-grid{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+    .leave-form{
+        padding:18px;
+    }
+}
