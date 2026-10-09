@@ -45,3 +45,96 @@
     height:20px;
     cursor:pointer;
 }
+
+/* Touch Slidebar for Settings Navigation */
+.employee-settings-slidebar {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 2px 14px 2px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+
+.employee-settings-slidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.settings-slide-tab {
+    background: rgba(30, 136, 229, 0.08);
+    border: 1px solid rgba(30, 136, 229, 0.2);
+    color: #334155;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    user-select: none;
+}
+
+.settings-slide-tab:hover {
+    background: rgba(30, 136, 229, 0.16);
+    border-color: #1E88E5;
+    transform: translateY(-1px);
+}
+
+.settings-slide-tab.active {
+    background: linear-gradient(135deg, #1E88E5, #1565C0);
+    color: #ffffff;
+    border-color: #1565C0;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.35);
+}
+
+.settings-section-block {
+    animation: fadeSlideIn 0.35s ease-out;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    margin-bottom: 18px;
+}
+
+.settings-section-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+    .settings-card {
+        padding: 18px 14px;
+    }
+
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 14px 0;
+    }
+
+    .setting-row input[type="text"],
+    .setting-row input[type="password"] {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .setting-row div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}

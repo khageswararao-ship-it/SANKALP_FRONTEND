@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   getAttendance,
   addAttendance,
@@ -13,6 +13,13 @@ import "../../styles/layout.css";
 import "../../styles/Dashboard.css";
 
 function Attendance() {
+  const tableRef = useRef(null);
+  const scrollTable = (dir) => {
+    if (tableRef.current) {
+      tableRef.current.scrollBy({ left: dir === "left" ? -280 : 280, behavior: "smooth" });
+    }
+  };
+
   const [attendance, setAttendance] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -477,7 +484,7 @@ function Attendance() {
           )}
 
           {/* Attendance Table with responsive slidebar */}
-          <div className="table-container" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
+          <div className="table-container" ref={tableRef} style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
             <table className="employee-table" style={{ minWidth: "750px", width: "100%" }}>
               <thead>
                 <tr>
@@ -552,6 +559,31 @@ function Attendance() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Interactive Slidebar Under The Table */}
+          <div className="table-slidebar-controller">
+            <button
+              type="button"
+              className="table-slide-btn"
+              onClick={() => scrollTable("left")}
+              title="Slide Left"
+            >
+              ◀ Slide Left
+            </button>
+            <div className="table-slide-track">
+              <span className="table-slide-text">
+                👉 Touch & slide table or use buttons to view all columns 👈
+              </span>
+            </div>
+            <button
+              type="button"
+              className="table-slide-btn"
+              onClick={() => scrollTable("right")}
+              title="Slide Right"
+            >
+              Slide Right ▶
+            </button>
           </div>
         </div>
       </div>

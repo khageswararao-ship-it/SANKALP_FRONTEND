@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   getEmployees,
   addEmployee,
@@ -27,6 +27,12 @@ export const REAL_DEPARTMENTS = [
 
 function Employees() {
   const navigate = useNavigate();
+  const tableRef = useRef(null);
+  const scrollTable = (dir) => {
+    if (tableRef.current) {
+      tableRef.current.scrollBy({ left: dir === "left" ? -280 : 280, behavior: "smooth" });
+    }
+  };
 
   const [employees, setEmployees] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -377,7 +383,7 @@ function Employees() {
           )}
 
           {/* Employee Table with responsive scroll */}
-          <div className="table-container" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
+          <div className="table-container" ref={tableRef} style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
             <table className="employee-table" style={{ minWidth: "650px", width: "100%" }}>
               <thead>
                 <tr>
@@ -441,6 +447,31 @@ function Employees() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Interactive Slidebar Under The Table */}
+          <div className="table-slidebar-controller">
+            <button
+              type="button"
+              className="table-slide-btn"
+              onClick={() => scrollTable("left")}
+              title="Slide Left"
+            >
+              ◀ Slide Left
+            </button>
+            <div className="table-slide-track">
+              <span className="table-slide-text">
+                👉 Touch & slide table or use buttons to view all columns 👈
+              </span>
+            </div>
+            <button
+              type="button"
+              className="table-slide-btn"
+              onClick={() => scrollTable("right")}
+              title="Slide Right"
+            >
+              Slide Right ▶
+            </button>
           </div>
         </div>
       </div>

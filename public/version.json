@@ -1,19 +1,16 @@
 {
-  "version": "1.2.0",
-  "build": 9,
+  "version": "1.2.1",
+  "build": 10,
   "releaseDate": "2026-10-09",
-  "title": "Sankalp_IP HRMS v1.2.0 Complete Update",
-  "description": "Comprehensive UI enhancements, Superior Admin permissions, department payroll & attendance, and mobile usability fixes.",
+  "title": "Sankalp_IP HRMS v1.2.1 UI & Mobile Slidebar Release",
+  "description": "True Pie Chart for Attendance Overview, mobile touch slidebars for Admin and Employee settings, Superior Admin badge & security.",
   "releaseNotes": [
-    "Google Search Console ownership verification file integrated",
-    "Enhanced SEO keywords for 'Sankalp_IP'",
-    "View/hide eye toggle button added to Login and Reset Password fields",
-    "Auto-generated Employee & Admin IDs (no manual typing required)",
-    "Corporate department dropdowns across Employees, Payroll, and Attendance",
-    "Empty state handling for Leaves with original Employee IDs preserved",
-    "Superior Admin security: only Superior Admin can delete accounts or assign Super Admin status",
-    "Smooth horizontal slidebar for mobile tables",
-    "Fixed attendance overview analytics and cleaned Dashboard"
+    "Full classic solid Pie Chart with animated tooltips for Attendance Overview",
+    "Interactive touch-friendly slidebars in Employee Settings and Admin Profile",
+    "Superior Admin (Owner) designation for Ravada Khageswar Rao (ADMIN001)",
+    "Superior Admin exclusive delete and authority management rights",
+    "Show/hide password visibility toggles in settings",
+    "Animated UI polish and mobile layout enhancements"
   ],
   "forceUpdate": false,
   "downloadUrl": "https://github.com/khageswararao-ship-it/SANKALP_FRONTEND/releases/latest"

@@ -367,3 +367,128 @@ body.dark-theme .salary-row.total {
 body.dark-theme .progress-bar {
   background: #334155;
 }
+
+/* ==========================================================================
+   GLOBAL APP-WIDE ANIMATIONS & REAL-TIME INTERACTION EFFECTS
+   ========================================================================== */
+
+/* Smooth Page Entrance Animation across all portals */
+.page-content {
+  animation: pageFadeSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card Hover Elevation and Glass Shimmer */
+.dashboard-card,
+.chart-card,
+.settings-card,
+.profile-card,
+.leave-card,
+.attendance-summary-card,
+.stat-card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, box-shadow;
+}
+
+.dashboard-card:hover,
+.chart-card:hover,
+.settings-card:hover,
+.profile-card:hover,
+.leave-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Interactive Button Hover & Click Ripple */
+.add-btn,
+.delete-btn,
+.action-btn,
+.add-admin-btn,
+.setting-btn,
+.table-slide-btn {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-btn:hover,
+.add-admin-btn:hover,
+.setting-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 136, 229, 0.35);
+}
+
+.add-btn:active,
+.delete-btn:active,
+.action-btn:active,
+.table-slide-btn:active {
+  transform: scale(0.96) !important;
+}
+
+/* Status Badges Glow Effect */
+.status.active,
+.status.approved {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  animation: badgeGlowGreen 3s infinite ease-in-out;
+}
+
+.status.pending {
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+  animation: badgeGlowAmber 3s infinite ease-in-out;
+}
+
+@keyframes badgeGlowGreen {
+  0%, 100% { box-shadow: 0 0 4px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+}
+
+@keyframes badgeGlowAmber {
+  0%, 100% { box-shadow: 0 0 4px rgba(245, 158, 11, 0.2); }
+  50% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+}
+
+/* Table Row Interactive Hover */
+.employee-table tbody tr,
+.admins-table tbody tr {
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.employee-table tbody tr:hover,
+.admins-table tbody tr:hover {
+  background-color: rgba(30, 136, 229, 0.05);
+}
+
+/* Modal Popup Entrance Animation */
+.popup-overlay {
+  animation: overlayFadeIn 0.25s ease-out;
+}
+
+.popup-form {
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

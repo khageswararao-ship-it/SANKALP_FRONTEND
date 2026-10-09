@@ -164,3 +164,146 @@
     max-width: 100%;
   }
 }
+
+/* Mobile Slidebar & Touch Scroll styling */
+.mobile-slidebar-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-bottom: 10px;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #1E88E5 rgba(30, 136, 229, 0.12);
+}
+
+.mobile-slidebar-container::-webkit-scrollbar {
+  height: 7px;
+}
+
+.mobile-slidebar-container::-webkit-scrollbar-track {
+  background: rgba(30, 136, 229, 0.08);
+  border-radius: 10px;
+}
+
+.mobile-slidebar-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #1E88E5, #3b82f6);
+  border-radius: 10px;
+}
+
+.slidebar-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #64748b;
+  margin-bottom: 8px;
+  background: rgba(30, 136, 229, 0.06);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+@keyframes crownPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8)); }
+}
+
+.crown-badge-anim {
+  animation: crownPulse 2.5s infinite ease-in-out;
+}
+
+/* Touch Filter Slidebar for Admins */
+.admin-filter-slidebar {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 2px 14px 2px;
+  margin-top: 10px;
+  scrollbar-width: none;
+}
+
+.admin-filter-slidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-slide-tab {
+  background: rgba(30, 136, 229, 0.08);
+  border: 1px solid rgba(30, 136, 229, 0.2);
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.admin-slide-tab:hover {
+  background: rgba(30, 136, 229, 0.16);
+  border-color: #1E88E5;
+  transform: translateY(-1px);
+}
+
+.admin-slide-tab.active {
+  background: linear-gradient(135deg, #1E88E5, #1565C0);
+  color: #ffffff;
+  border-color: #1565C0;
+  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.35);
+}
+
+/* Interactive Table Slidebar Under The Table */
+.table-slidebar-controller {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(30, 136, 229, 0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table-slide-btn {
+  background: linear-gradient(135deg, #1E88E5, #1565C0);
+  color: #ffffff;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(30, 136, 229, 0.3);
+  user-select: none;
+}
+
+.table-slide-btn:hover {
+  background: linear-gradient(135deg, #1565C0, #0d47a1);
+  transform: translateY(-1px);
+}
+
+.table-slide-btn:active {
+  transform: translateY(1px);
+}
+
+.table-slide-track {
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-slide-text {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+}

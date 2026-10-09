@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
@@ -7,6 +7,17 @@ import admin from "../../assets/admin.png";
 import { getProfile, updateProfile, getAllAdmins, addAdmin, deleteAdmin, updateAdminAccount } from "../../api/profileApi";
 
 function Profile() {
+  const adminsTableRef = useRef(null);
+
+  const scrollAdminsTable = (direction) => {
+    if (adminsTableRef.current) {
+      adminsTableRef.current.scrollBy({
+        left: direction === "left" ? -280 : 280,
+        behavior: "smooth",
+      });
+    }
+  };
+
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showAddAdmin, setShowAddAdmin] = useState(false);
@@ -40,10 +51,13 @@ function Profile() {
     confirm: "",
   });
 
+  const [adminTabFilter, setAdminTabFilter] = useState("ALL"); // "ALL", "SUPERIOR", "STANDARD"
+
   const isSuperiorAdmin =
     profile.employeeId === "ADMIN001" ||
     (profile.role && profile.role.toUpperCase().includes("SUPER")) ||
-    (profile.username && profile.username.toLowerCase().includes("khageswar"));
+    (profile.username && profile.username.toLowerCase().includes("khageswar")) ||
+    (allAdmins.length <= 1);
 
   const generateNextAdminId = () => {
     const existingNums = (allAdmins || [])
@@ -363,8 +377,33 @@ function Profile() {
 
               {/* Role */}
               <div className="profile-row">
-                <strong>Role:</strong>
-                <span>Administrator (Super Admin)</span>
+                <strong>Access Level:</strong>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: isSuperiorAdmin
+                      ? "linear-gradient(135deg, #f59e0b, #d97706)"
+                      : "#1E88E5",
+                    color: "#ffffff",
+                    padding: "4px 12px",
+                    borderRadius: "20px",
+                    fontSize: "13px",
+                    fontWeight: "700",
+                    boxShadow: isSuperiorAdmin
+                      ? "0 3px 10px rgba(245, 158, 11, 0.35)"
+                      : "none",
+                  }}
+                >
+                  {isSuperiorAdmin ? (
+                    <>
+                      <span className="crown-badge-anim">👑</span> Superior Admin (Owner)
+                    </>
+                  ) : (
+                    "Standard Administrator"
+                  )}
+                </span>
               </div>
 
               {/* Action Buttons */}
@@ -407,9 +446,9 @@ function Profile() {
           <div className="admins-section">
             <div className="admins-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
               <div>
-                <h2 style={{ margin: 0 }}>All Administrators ({allAdmins.length})</h2>
-                <span style={{ fontSize: "12px", color: isSuperiorAdmin ? "#10b981" : "#64748b", fontWeight: "600" }}>
-                  {isSuperiorAdmin ? "👑 Superior Admin Privileges Active" : "Standard Admin Access"}
+                <h2 style={{ margin: 0 }}>All Administrators ({allAdmins.length > 0 ? allAdmins.length : 1})</h2>
+                <span style={{ fontSize: "12px", color: isSuperiorAdmin ? "#d97706" : "#64748b", fontWeight: "600" }}>
+                  {isSuperiorAdmin ? "👑 Logged in as Superior Admin (Full Authority)" : "Standard Administrator Access"}
                 </span>
               </div>
               <button
@@ -421,92 +460,156 @@ function Profile() {
               </button>
             </div>
 
-            {/* Responsive Table Slidebar */}
-            <div
-              className="table-slidebar-container"
-              style={{
-                overflowX: "auto",
-                WebkitOverflowScrolling: "touch",
-                width: "100%",
-                marginTop: "15px",
-                paddingBottom: "8px",
-              }}
-            >
-              <table className="admins-table" style={{ minWidth: "750px", width: "100%" }}>
+            {/* Mobile Filter Slidebar Tabs */}
+            <div className="admin-filter-slidebar">
+              <button
+                type="button"
+                className={`admin-slide-tab ${adminTabFilter === "ALL" ? "active" : ""}`}
+                onClick={() => setAdminTabFilter("ALL")}
+              >
+                👥 All Admins ({allAdmins.length > 0 ? allAdmins.length : 1})
+              </button>
+              <button
+                type="button"
+                className={`admin-slide-tab ${adminTabFilter === "SUPERIOR" ? "active" : ""}`}
+                onClick={() => setAdminTabFilter("SUPERIOR")}
+              >
+                👑 Superior Admin (Owner)
+              </button>
+              <button
+                type="button"
+                className={`admin-slide-tab ${adminTabFilter === "STANDARD" ? "active" : ""}`}
+                onClick={() => setAdminTabFilter("STANDARD")}
+              >
+                🛡️ Standard Admins (
+                {
+                  allAdmins.filter(
+                    (a) =>
+                      a.employeeId !== "ADMIN001" &&
+                      allAdmins.length > 1 &&
+                      !String(a.role || "").toUpperCase().includes("SUPER") &&
+                      !String(a.username || "").toLowerCase().includes("khageswar")
+                  ).length
+                }
+                )
+              </button>
+            </div>
+
+            <div className="slidebar-hint">
+              👉 Touch & slide horizontally to view all administrator details and controls
+            </div>
+
+            {/* Responsive Touch-Friendly Slidebar Container */}
+            <div className="table-container mobile-slidebar-container" ref={adminsTableRef}>
+              <table className="employee-table admins-table" style={{ minWidth: "800px", width: "100%" }}>
                 <thead>
                   <tr>
                     <th>Admin ID</th>
                     <th>Username / Name</th>
                     <th>Email</th>
                     <th>Mobile Number</th>
-                    <th>Role</th>
+                    <th>Authority Level</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {allAdmins.length > 0 ? (
-                    allAdmins.map((adm) => (
-                      <tr key={adm.id}>
-                        <td><strong>{adm.employeeId}</strong></td>
-                        <td>{adm.username}</td>
-                        <td>{adm.email}</td>
-                        <td>{adm.mobileNumber || "-"}</td>
-                        <td>
-                          <span style={{ fontWeight: adm.role?.toUpperCase().includes("SUPER") ? "700" : "500", color: adm.role?.toUpperCase().includes("SUPER") ? "#1E88E5" : "inherit" }}>
-                            {adm.role || "ADMIN"}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="status-badge">
-                            {adm.accountStatus || "ACTIVE"}
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
-                            <button
-                              type="button"
-                              className="action-btn edit"
-                              onClick={() => {
-                                setAdminPasswordTarget(adm);
-                                setAdminNewPassword("");
-                                setAdminConfirmPassword("");
-                              }}
-                              title="Set New Password for this Admin"
-                              style={{ fontSize: "12px", padding: "6px 10px" }}
-                            >
-                              🔑 New Password
-                            </button>
-
-                            {/* Only Superior Admin can delete accounts; primary Superior Admin and own account cannot be deleted */}
-                            {isSuperiorAdmin && adm.employeeId !== "ADMIN001" && adm.id !== profile.id && (
+                  {displayedAdmins.length > 0 ? (
+                    displayedAdmins.map((adm) => {
+                      const isRowSuperior =
+                        adm.employeeId === "ADMIN001" ||
+                        allAdmins.length <= 1 ||
+                        String(adm.role || "").toUpperCase().includes("SUPER") ||
+                        String(adm.username || "").toLowerCase().includes("khageswar");
+                      return (
+                        <tr key={adm.id || adm.employeeId}>
+                          <td><strong>{adm.employeeId}</strong></td>
+                          <td>{adm.username}</td>
+                          <td>{adm.email}</td>
+                          <td>{adm.mobileNumber || "-"}</td>
+                          <td>
+                            {isRowSuperior ? (
+                              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(245,158,11,0.15)", color: "#b45309", padding: "4px 10px", borderRadius: "20px", fontWeight: "700", fontSize: "12px" }}>
+                                👑 Superior Admin
+                              </span>
+                            ) : (
+                              <span style={{ background: "rgba(30,136,229,0.1)", color: "#1E88E5", padding: "4px 10px", borderRadius: "20px", fontWeight: "600", fontSize: "12px" }}>
+                                Standard Admin
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <span className="status-badge">
+                              {adm.accountStatus || "ACTIVE"}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
                               <button
                                 type="button"
-                                className="action-btn delete"
-                                onClick={() => handleDeleteAdmin(adm)}
-                                title="Delete Administrator"
+                                className="action-btn edit"
+                                onClick={() => {
+                                  setAdminPasswordTarget(adm);
+                                  setAdminNewPassword("");
+                                  setAdminConfirmPassword("");
+                                }}
+                                title="Set New Password for this Admin"
                                 style={{ fontSize: "12px", padding: "6px 10px" }}
                               >
-                                🗑️ Delete
+                                🔑 New Password
                               </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+
+                              {/* Only Superior Admin can delete accounts; primary Superior Admin and own account cannot be deleted */}
+                              {isSuperiorAdmin && adm.employeeId !== "ADMIN001" && adm.id !== profile.id && (
+                                <button
+                                  type="button"
+                                  className="action-btn delete"
+                                  onClick={() => handleDeleteAdmin(adm)}
+                                  title="Delete Administrator"
+                                  style={{ fontSize: "12px", padding: "6px 10px" }}
+                                >
+                                  🗑️ Delete
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
-                      <td><strong>{profile.employeeId || "ADMIN001"}</strong></td>
-                      <td>{profile.username}</td>
-                      <td>{profile.email}</td>
-                      <td>{profile.mobileNumber || "-"}</td>
-                      <td>SUPER_ADMIN</td>
-                      <td><span className="status-badge">ACTIVE</span></td>
-                      <td><span style={{ color: "#94a3b8", fontSize: "12px" }}>Primary</span></td>
+                      <td colSpan="7" style={{ textAlign: "center", padding: "25px", color: "#64748b" }}>
+                        No administrators found matching this tab filter.
+                      </td>
                     </tr>
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Dedicated Interactive Slidebar Under The Table */}
+            <div className="table-slidebar-controller">
+              <button
+                type="button"
+                className="table-slide-btn"
+                onClick={() => scrollAdminsTable("left")}
+                title="Slide left to view ID and Name"
+              >
+                ◀ Slide Left
+              </button>
+              <div className="table-slide-track">
+                <span className="table-slide-text">
+                  👉 Touch & slide table or use buttons to view all Admin columns 👈
+                </span>
+              </div>
+              <button
+                type="button"
+                className="table-slide-btn"
+                onClick={() => scrollAdminsTable("right")}
+                title="Slide right to view Status and Actions"
+              >
+                Slide Right ▶
+              </button>
             </div>
           </div>
         </div>

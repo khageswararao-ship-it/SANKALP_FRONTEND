@@ -99,12 +99,17 @@ function Dashboard() {
   };
 
   // Build robust attendance data for chart
-  const attendanceChartData = [
-    { name: "Present", value: attendanceCounts.present || (attendanceCounts.total === 0 ? 1 : 0), fill: COLORS.Present },
-    { name: "Absent", value: attendanceCounts.absent, fill: COLORS.Absent },
-    { name: "Late", value: attendanceCounts.late, fill: COLORS.Late },
-    { name: "Leave", value: attendanceCounts.leave, fill: COLORS.Leave },
-  ].filter((item) => item.value > 0);
+  const hasAttendanceRecords = attendanceCounts.total > 0;
+  const attendanceChartData = hasAttendanceRecords
+    ? [
+        { name: "Present", value: attendanceCounts.present, fill: COLORS.Present },
+        { name: "Absent", value: attendanceCounts.absent, fill: COLORS.Absent },
+        { name: "Late", value: attendanceCounts.late, fill: COLORS.Late },
+        { name: "On Leave", value: attendanceCounts.leave, fill: COLORS.Leave },
+      ].filter((item) => item.value > 0)
+    : [
+        { name: "Active Employees", value: employees > 0 ? employees : 1, fill: COLORS.Present },
+      ];
 
   return (
     <div className="layout">
@@ -173,9 +178,9 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Robust Pie Chart */}
-              <div style={{ width: "100%", height: "280px" }}>
-                <ResponsiveContainer width="100%" height="100%">
+              {/* Robust True Solid Pie Chart */}
+              <div style={{ width: "100%", height: "290px", minHeight: "290px", position: "relative" }}>
+                <ResponsiveContainer width="100%" height={290} minHeight={290}>
                   <PieChart>
                     <Pie
                       data={attendanceChartData}
@@ -183,9 +188,13 @@ function Dashboard() {
                       nameKey="name"
                       cx="50%"
                       cy="50%"
-                      outerRadius={95}
-                      innerRadius={45}
-                      paddingAngle={4}
+                      outerRadius={100}
+                      innerRadius={0}
+                      paddingAngle={attendanceChartData.length > 1 ? 2 : 0}
+                      stroke="#ffffff"
+                      strokeWidth={2}
+                      isAnimationActive={true}
+                      animationDuration={900}
                       label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     >
                       {attendanceChartData.map((entry, index) => (
@@ -193,7 +202,7 @@ function Dashboard() {
                       ))}
                     </Pie>
                     <Tooltip formatter={(value, name) => [`${value} Employee(s)`, name]} />
-                    <Legend />
+                    <Legend verticalAlign="bottom" height={36} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
