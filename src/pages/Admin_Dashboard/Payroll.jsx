@@ -4,169 +4,211 @@ import {
   addPayroll,
   updatePayroll,
   deletePayroll,
-  getPayrollById,
 } from "../../api/payrollApi";
+import { getEmployees } from "../../api/employeeApi";
+import { REAL_DEPARTMENTS } from "./Employees";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
 import "../../styles/Dashboard.css";
 
 function Payroll() {
+  const [payrollData, setPayrollData] = useState([]);
+  const [employeesList, setEmployeesList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [viewPayroll, setViewPayroll] = useState(null);
 
-const [payrollData, setPayrollData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [monthFilter, setMonthFilter] = useState("");
 
-useEffect(() => {
-  fetchPayroll();
-}, []);
+  const [selectedDept, setSelectedDept] = useState("");
+  const [newPayroll, setNewPayroll] = useState({
+    id: "",
+    name: "",
+    department: "",
+    basicSalary: "",
+    bonus: "0",
+    netSalary: "",
+    month: "August 2026",
+    status: "Pending",
+  });
 
-const fetchPayroll = async () => {
-  try {
-    const response = await getPayroll();
-    setPayrollData(response.data);
-  } catch (error) {
-    console.error("Error fetching payroll:", error);
-  }
-};
-
-const [showForm, setShowForm] = useState(false);
-const [isEditing, setIsEditing] = useState(false);
-const [viewPayroll, setViewPayroll] = useState(null);
-
-const [search, setSearch] = useState("");
-const [departmentFilter, setDepartmentFilter] = useState("");
-const [monthFilter, setMonthFilter] = useState("");
-
-const [newPayroll, setNewPayroll] = useState({
-  id: "",
-  name: "",
-  department: "",
-  basicSalary: "",
-  bonus: "",
-  netSalary: "",
-  month: "August 2026",
-  status: "Pending",
-});
-
-
-
-
-
-const filteredPayroll = payrollData.filter((payroll) => {
-
-const searchMatch =
-payroll.id.toLowerCase().includes(search.toLowerCase()) ||
-payroll.name.toLowerCase().includes(search.toLowerCase());
-
-const departmentMatch =
-departmentFilter === "" ||
-payroll.department === departmentFilter;
-
-const monthMatch =
-monthFilter === "" ||
-payroll.month === monthFilter;
-
-return searchMatch && departmentMatch && monthMatch;
-
-});
-
-
-const handleSave = async () => {
-  if (
-    !newPayroll.id ||
-    !newPayroll.name ||
-    !newPayroll.department ||
-    !newPayroll.basicSalary
-  ) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  try {
-    await addPayroll({
-      ...newPayroll,
-      netSalary:
-        Number(newPayroll.basicSalary) +
-        Number(newPayroll.bonus),
-    });
-
+  useEffect(() => {
     fetchPayroll();
+    fetchEmployeesList();
+  }, []);
 
-    setShowForm(false);
+  const fetchPayroll = async () => {
+    try {
+      const response = await getPayroll();
+      if (response && response.data) {
+        setPayrollData(Array.isArray(response.data) ? response.data : []);
+      }
+    } catch (error) {
+      console.error("Error fetching payroll:", error);
+    }
+  };
+
+  const fetchEmployeesList = async () => {
+    try {
+      const response = await getEmployees();
+      if (response && response.data) {
+        setEmployeesList(Array.isArray(response.data) ? response.data : []);
+      }
+    } catch (error) {
+      console.warn("Error fetching employees list:", error);
+    }
+  };
+
+  const handleOpenGenerate = () => {
+    setIsEditing(false);
+    const initialDept = REAL_DEPARTMENTS[0];
+    setSelectedDept(initialDept);
+
+    const deptEmployees = employeesList.filter((e) => e.department === initialDept);
+    const firstEmp = deptEmployees[0] || employeesList[0];
 
     setNewPayroll({
-      id: "",
-      name: "",
-      department: "",
-      basicSalary: "",
-      bonus: "",
-      netSalary: "",
+      id: firstEmp ? firstEmp.id : "",
+      name: firstEmp ? firstEmp.name : "",
+      department: firstEmp ? (firstEmp.department || initialDept) : initialDept,
+      basicSalary: "35000",
+      bonus: "5000",
+      netSalary: "40000",
       month: "August 2026",
       status: "Pending",
     });
 
-    alert("Payroll Generated Successfully!");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
-const handleView = async (id) => {
-  try {
-    const response = await getPayrollById(id);
-    setViewPayroll(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
-const handleEdit = async (id) => {
-  try {
-    const response = await getPayrollById(id);
-
-    setNewPayroll(response.data);
-
-    setIsEditing(true);
     setShowForm(true);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
+  const handleDepartmentChange = (dept) => {
+    setSelectedDept(dept);
+    const matchingEmployees = employeesList.filter((e) => e.department === dept);
+    const chosenEmp = matchingEmployees[0];
 
-const handleUpdate = async () => {
-  try {
-    await updatePayroll(newPayroll.id, {
-      ...newPayroll,
-      netSalary:
-        Number(newPayroll.basicSalary) +
-        Number(newPayroll.bonus),
-    });
+    if (chosenEmp) {
+      setNewPayroll((prev) => ({
+        ...prev,
+        department: dept,
+        id: chosenEmp.id,
+        name: chosenEmp.name,
+      }));
+    } else {
+      setNewPayroll((prev) => ({
+        ...prev,
+        department: dept,
+        id: "",
+        name: "",
+      }));
+    }
+  };
 
-    fetchPayroll();
+  const handleEmployeeSelect = (empId) => {
+    const emp = employeesList.find((e) => e.id === empId);
+    if (emp) {
+      setNewPayroll((prev) => ({
+        ...prev,
+        id: emp.id,
+        name: emp.name,
+        department: emp.department || selectedDept,
+      }));
+    }
+  };
 
-    setShowForm(false);
-    setIsEditing(false);
+  const filteredPayroll = payrollData.filter((payroll) => {
+    const searchMatch =
+      (payroll.id || "").toLowerCase().includes(search.toLowerCase()) ||
+      (payroll.name || "").toLowerCase().includes(search.toLowerCase());
 
-    alert("Payroll Updated Successfully!");
-  } catch (error) {
-    console.error(error);
-  }
-};
+    const departmentMatch =
+      departmentFilter === "" || payroll.department === departmentFilter;
 
+    const monthMatch =
+      monthFilter === "" || payroll.month === monthFilter;
 
-const handleDelete = async (id) => {
-  if (window.confirm("Delete Payroll?")) {
+    return searchMatch && departmentMatch && monthMatch;
+  });
+
+  const handleSave = async () => {
+    if (!newPayroll.id || !newPayroll.name || !newPayroll.basicSalary) {
+      alert("Please select an employee and enter basic salary.");
+      return;
+    }
+
+    try {
+      const basic = Number(newPayroll.basicSalary) || 0;
+      const bonus = Number(newPayroll.bonus) || 0;
+
+      await addPayroll({
+        ...newPayroll,
+        basicSalary: basic,
+        bonus: bonus,
+        netSalary: basic + bonus,
+      });
+
+      await fetchPayroll();
+      setShowForm(false);
+      alert("Payroll Record Generated Successfully!");
+    } catch (error) {
+      console.error("Error saving payroll:", error);
+      alert("Failed to generate payroll record.");
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const basic = Number(newPayroll.basicSalary) || 0;
+      const bonus = Number(newPayroll.bonus) || 0;
+
+      await updatePayroll(newPayroll.id, {
+        ...newPayroll,
+        basicSalary: basic,
+        bonus: bonus,
+        netSalary: basic + bonus,
+      });
+
+      await fetchPayroll();
+      setShowForm(false);
+      setIsEditing(false);
+      alert("Payroll Record Updated Successfully!");
+    } catch (error) {
+      console.error("Error updating payroll:", error);
+      alert("Failed to update payroll.");
+    }
+  };
+
+  const handleEdit = (id) => {
+    const record = payrollData.find((p) => p.id === id);
+    if (record) {
+      setNewPayroll({ ...record });
+      setIsEditing(true);
+      setShowForm(true);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm(`Are you sure you want to delete payroll record for ${id}?`)) {
+      return;
+    }
     try {
       await deletePayroll(id);
-      fetchPayroll();
+      await fetchPayroll();
+      alert("Payroll record deleted successfully.");
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting payroll:", error);
+      alert("Failed to delete payroll record.");
     }
-  }
-};
+  };
 
+  const handleView = (id) => {
+    const record = payrollData.find((p) => p.id === id);
+    if (record) {
+      setViewPayroll(record);
+    }
+  };
 
   return (
     <div className="layout">
@@ -176,225 +218,243 @@ const handleDelete = async (id) => {
         <Header title="Payroll" />
 
         <div className="page-content">
-
           <h1 className="page-title">Payroll Management</h1>
 
-<div className="dashboard-grid">
+          {/* Toolbar */}
+          <div className="employee-toolbar" style={{ flexWrap: "wrap", gap: "10px" }}>
+            <input
+              className="search-box"
+              placeholder="🔍 Search Employee Name / ID..."
+              value={search}
+              style={{ minWidth: "220px" }}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-  <div className="dashboard-card">
-    <h3>Total Payrolls</h3>
-    <h2>{payrollData.length}</h2>
-  </div>
+            <select
+              className="filter-box"
+              value={departmentFilter}
+              onChange={(e) => setDepartmentFilter(e.target.value)}
+            >
+              <option value="">All Departments</option>
+              {REAL_DEPARTMENTS.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
 
-  <div className="dashboard-card">
-    <h3>Paid</h3>
-    <h2>{payrollData.filter(p => p.status === "Paid").length}</h2>
-  </div>
+            <select
+              className="filter-box"
+              value={monthFilter}
+              onChange={(e) => setMonthFilter(e.target.value)}
+            >
+              <option value="">All Months</option>
+              <option value="August 2026">August 2026</option>
+              <option value="July 2026">July 2026</option>
+              <option value="June 2026">June 2026</option>
+              <option value="May 2026">May 2026</option>
+            </select>
 
-  <div className="dashboard-card">
-    <h3>Pending</h3>
-    <h2>{payrollData.filter(p => p.status === "Pending").length}</h2>
-  </div>
+            <button
+              type="button"
+              className="action-btn"
+              onClick={() => {
+                setSearch("");
+                setDepartmentFilter("");
+                setMonthFilter("");
+              }}
+            >
+              Reset
+            </button>
 
-</div>
+            <button
+              type="button"
+              className="add-btn"
+              onClick={handleOpenGenerate}
+            >
+              + Generate Payroll
+            </button>
+          </div>
 
-<div className="employee-toolbar">
+          {/* Generate / Edit Payroll Popup Modal */}
+          {showForm && (
+            <div className="popup-overlay" onClick={() => setShowForm(false)}>
+              <div className="popup-form" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "520px", width: "92vw" }}>
+                <h2>{isEditing ? "Edit Payroll Record" : "Generate Payroll"}</h2>
 
-<input
-  className="search-box"
-  placeholder="Search Employee..."
-  value={search}
-  onChange={(e)=>setSearch(e.target.value)}
-/>
+                {!isEditing && (
+                  <>
+                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                      Select Department *
+                    </label>
+                    <select
+                      className="filter-box"
+                      style={{ width: "100%", marginBottom: "14px" }}
+                      value={selectedDept}
+                      onChange={(e) => handleDepartmentChange(e.target.value)}
+                    >
+                      {REAL_DEPARTMENTS.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                    </select>
 
-<select
-  className="filter-box"
-  value={departmentFilter}
-  onChange={(e)=>setDepartmentFilter(e.target.value)}
->
-<option value="">All Departments</option>
-<option>HR</option>
-<option>Finance</option>
-<option>IT</option>
-</select>
+                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                      Select Employee from {selectedDept} *
+                    </label>
+                    <select
+                      className="filter-box"
+                      style={{ width: "100%", marginBottom: "14px" }}
+                      value={newPayroll.id}
+                      onChange={(e) => handleEmployeeSelect(e.target.value)}
+                    >
+                      {employeesList
+                        .filter((e) => !selectedDept || e.department === selectedDept)
+                        .map((emp) => (
+                          <option key={emp.id} value={emp.id}>
+                            {emp.name} ({emp.id})
+                          </option>
+                        ))}
+                      {employeesList.filter((e) => !selectedDept || e.department === selectedDept).length === 0 && (
+                        <option value="">No staff registered in this department</option>
+                      )}
+                    </select>
+                  </>
+                )}
 
-<select
-  className="filter-box"
-  value={monthFilter}
-  onChange={(e)=>setMonthFilter(e.target.value)}
->
-<option value="">All Months</option>
-<option>August 2026</option>
-<option>July 2026</option>
-<option>June 2026</option>
-</select>
+                <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                  Employee ID & Name
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "10px", marginBottom: "14px" }}>
+                  <input
+                    type="text"
+                    value={newPayroll.id}
+                    readOnly
+                    placeholder="ID"
+                    style={{ background: "rgba(30,136,229,0.06)", fontWeight: "700" }}
+                  />
+                  <input
+                    type="text"
+                    value={newPayroll.name}
+                    readOnly
+                    placeholder="Employee Name"
+                    style={{ background: "rgba(30,136,229,0.06)", fontWeight: "600" }}
+                  />
+                </div>
 
-<button
-className="action-btn"
-onClick={()=>{
-setSearch("");
-setDepartmentFilter("");
-setMonthFilter("");
-}}
->
-Reset
-</button>
+                <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                  Basic Salary (₹) *
+                </label>
+                <input
+                  type="number"
+                  placeholder="Basic Salary"
+                  value={newPayroll.basicSalary}
+                  onChange={(e) =>
+                    setNewPayroll({ ...newPayroll, basicSalary: e.target.value })
+                  }
+                />
 
-<button
-  className="add-btn"
-  onClick={() => {
-    setIsEditing(false);
+                <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                  Bonus / Allowance (₹)
+                </label>
+                <input
+                  type="number"
+                  placeholder="Bonus"
+                  value={newPayroll.bonus}
+                  onChange={(e) =>
+                    setNewPayroll({ ...newPayroll, bonus: e.target.value })
+                  }
+                />
 
-    setNewPayroll({
-      id: "",
-      name: "",
-      department: "",
-      basicSalary: "",
-      bonus: "",
-      netSalary: "",
-      month: "August 2026",
-      status: "Pending",
-    });
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "15px" }}>
+                  <div>
+                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                      Month
+                    </label>
+                    <select
+                      className="filter-box"
+                      style={{ width: "100%" }}
+                      value={newPayroll.month}
+                      onChange={(e) =>
+                        setNewPayroll({ ...newPayroll, month: e.target.value })
+                      }
+                    >
+                      <option value="August 2026">August 2026</option>
+                      <option value="July 2026">July 2026</option>
+                      <option value="June 2026">June 2026</option>
+                      <option value="May 2026">May 2026</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                      Payment Status
+                    </label>
+                    <select
+                      className="filter-box"
+                      style={{ width: "100%" }}
+                      value={newPayroll.status}
+                      onChange={(e) =>
+                        setNewPayroll({ ...newPayroll, status: e.target.value })
+                      }
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Paid">Paid</option>
+                    </select>
+                  </div>
+                </div>
 
-    setShowForm(true);
-  }}
->
-  Generate Payroll
-</button>
+                <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+                  <button
+                    type="button"
+                    className="add-btn"
+                    onClick={isEditing ? handleUpdate : handleSave}
+                  >
+                    {isEditing ? "Update Payroll" : "Save Payroll"}
+                  </button>
+                  <button
+                    type="button"
+                    className="delete-btn"
+                    onClick={() => {
+                      setShowForm(false);
+                      setIsEditing(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
-</div>
+          {/* View Details Popup */}
+          {viewPayroll && (
+            <div className="popup-overlay" onClick={() => setViewPayroll(null)}>
+              <div className="popup-form" onClick={(e) => e.stopPropagation()}>
+                <h2>Payroll Details</h2>
+                <p><strong>Employee ID:</strong> {viewPayroll.id}</p>
+                <p><strong>Name:</strong> {viewPayroll.name}</p>
+                <p><strong>Department:</strong> {viewPayroll.department}</p>
+                <p><strong>Basic Salary:</strong> ₹{viewPayroll.basicSalary}</p>
+                <p><strong>Bonus:</strong> ₹{viewPayroll.bonus}</p>
+                <p><strong>Net Salary:</strong> ₹{viewPayroll.netSalary}</p>
+                <p><strong>Month:</strong> {viewPayroll.month}</p>
+                <p><strong>Status:</strong> {viewPayroll.status}</p>
 
-{showForm && (
-  <div className="popup-overlay">
-    <div className="popup-form">
+                <button
+                  type="button"
+                  className="add-btn"
+                  onClick={() => setViewPayroll(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
 
-      <h2>{isEditing ? "Edit Payroll" : "Generate Payroll"}</h2>
-
-<input
-  type="text"
-  value={newPayroll.id}
-  readOnly
-/>
-
-<input
-  type="text"
-  value={newPayroll.name}
-  readOnly
-/>
-
-<input
-  type="text"
-  value={newPayroll.department}
-  readOnly
-/>
-
-<input
-  type="number"
-  value={newPayroll.basicSalary}
-  readOnly
-/>
-
-<select
-  value={newPayroll.month}
-  onChange={(e) =>
-    setNewPayroll({
-      ...newPayroll,
-      month: e.target.value,
-    })
-  }
->
-  <option>August 2026</option>
-  <option>July 2026</option>
-  <option>June 2026</option>
-</select>
-
-      <input
-        type="number"
-        placeholder="Bonus"
-        value={newPayroll.bonus}
-        onChange={(e) =>
-          setNewPayroll({
-            ...newPayroll,
-            bonus: e.target.value,
-          })
-        }
-      />
-
-      <select
-        value={newPayroll.status}
-        onChange={(e) =>
-          setNewPayroll({
-            ...newPayroll,
-            status: e.target.value,
-          })
-        }
-      >
-        <option>Pending</option>
-        <option>Paid</option>
-      </select>
-
-      <button
-        className="add-btn"
-        onClick={isEditing ? handleUpdate : handleSave}
-      >
-        {isEditing ? "Update" : "Save"}
-      </button>
-
-<button
-  className="delete-btn"
-  onClick={() => {
-    setShowForm(false);
-    setIsEditing(false);
-
-    setNewPayroll({
-      id: "",
-      name: "",
-      department: "",
-      basicSalary: "",
-      bonus: "",
-      netSalary: "",
-      month: "August 2026",
-      status: "Pending",
-    });
-  }}
->
-  Cancel
-</button>
-
-</div>
-</div>
-)}
-
-{viewPayroll && (
-  <div className="popup-overlay">
-    <div className="popup-form">
-
-      <h2>Payroll Details</h2>
-
-      <p><strong>ID:</strong> {viewPayroll.id}</p>
-      <p><strong>Name:</strong> {viewPayroll.name}</p>
-      <p><strong>Department:</strong> {viewPayroll.department}</p>
-      <p><strong>Basic Salary:</strong> ₹{viewPayroll.basicSalary}</p>
-      <p><strong>Bonus:</strong> ₹{viewPayroll.bonus}</p>
-      <p><strong>Net Salary:</strong> ₹{viewPayroll.netSalary}</p>
-      <p><strong>Month:</strong> {viewPayroll.month}</p>
-      <p><strong>Status:</strong> {viewPayroll.status}</p>
-
-      <button
-        className="add-btn"
-        onClick={() => setViewPayroll(null)}
-      >
-        Close
-      </button>
-
-    </div>
-  </div>
-)}
-
-          <div className="table-container">
-
-            <table className="employee-table">
-
+          {/* Payroll Table with responsive scroll */}
+          <div className="table-container" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
+            <table className="employee-table" style={{ minWidth: "750px", width: "100%" }}>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -407,72 +467,65 @@ Reset
                   <th>Actions</th>
                 </tr>
               </thead>
-
-<tbody>
-  {filteredPayroll.map((payroll) => (
-    <tr key={payroll.id}>
-
-      <td>{payroll.id}</td>
-
-      <td>{payroll.name}</td>
-
-      <td>{payroll.department}</td>
-
-      <td>₹{payroll.basicSalary}</td>
-
-      <td>₹{payroll.bonus}</td>
-
-      <td>₹{payroll.netSalary}</td>
-
-      <td>
-        <span
-          className={`status ${
-            payroll.status === "Paid"
-              ? "active"
-              : "pending"
-          }`}
-        >
-          {payroll.status}
-        </span>
-      </td>
-
-      <td>
-
-        <button
-          className="action-btn view"
-          onClick={() => handleView(payroll.id)}
-        >
-          View
-        </button>
-
-        <button
-          className="action-btn edit"
-          onClick={() => handleEdit(payroll.id)}
-        >
-          Edit
-        </button>
-
-        <button
-          className="action-btn delete"
-          onClick={() => handleDelete(payroll.id)}
-        >
-          Delete
-        </button>
-
-      </td>
-
-    </tr>
-  ))}
-</tbody>
-
-</table>
-</div>
-
+              <tbody>
+                {filteredPayroll.length > 0 ? (
+                  filteredPayroll.map((payroll) => (
+                    <tr key={`${payroll.id}-${payroll.month}`}>
+                      <td><strong>{payroll.id}</strong></td>
+                      <td>{payroll.name}</td>
+                      <td>{payroll.department}</td>
+                      <td>₹{Number(payroll.basicSalary || 0).toLocaleString()}</td>
+                      <td>₹{Number(payroll.bonus || 0).toLocaleString()}</td>
+                      <td>₹{Number(payroll.netSalary || 0).toLocaleString()}</td>
+                      <td>
+                        <span
+                          className={`status ${
+                            payroll.status === "Paid" ? "active" : "pending"
+                          }`}
+                        >
+                          {payroll.status}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <button
+                            type="button"
+                            className="action-btn view"
+                            onClick={() => handleView(payroll.id)}
+                          >
+                            View
+                          </button>
+                          <button
+                            type="button"
+                            className="action-btn edit"
+                            onClick={() => handleEdit(payroll.id)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="action-btn delete"
+                            onClick={() => handleDelete(payroll.id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" style={{ textAlign: "center", padding: "30px", color: "#64748b" }}>
+                      No payroll records found. Click "+ Generate Payroll" to create one.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-
         </div>
       </div>
-    
+    </div>
   );
 }
 

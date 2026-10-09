@@ -40,6 +40,34 @@ function Profile() {
     confirm: "",
   });
 
+  const isSuperiorAdmin =
+    profile.employeeId === "ADMIN001" ||
+    (profile.role && profile.role.toUpperCase().includes("SUPER")) ||
+    (profile.username && profile.username.toLowerCase().includes("khageswar"));
+
+  const generateNextAdminId = () => {
+    const existingNums = (allAdmins || [])
+      .map((a) => {
+        const match = String(a.employeeId).match(/\d+/);
+        return match ? parseInt(match[0], 10) : 0;
+      })
+      .filter((n) => !isNaN(n));
+    const maxNum = existingNums.length > 0 ? Math.max(...existingNums, 1) : 1;
+    return `ADMIN${String(maxNum + 1).padStart(3, "0")}`;
+  };
+
+  const handleOpenAddAdmin = () => {
+    setNewAdmin({
+      employeeId: generateNextAdminId(),
+      username: "",
+      email: "",
+      mobileNumber: "",
+      password: "",
+      role: "ADMIN",
+    });
+    setShowAddAdmin(true);
+  };
+
   useEffect(() => {
     fetchProfile();
     fetchAdmins();
@@ -136,12 +164,12 @@ function Profile() {
 
     try {
       const adminPayload = {
-        employeeId: newAdmin.employeeId.trim() || `ADMIN${Math.floor(100 + Math.random() * 900)}`,
+        employeeId: newAdmin.employeeId || generateNextAdminId(),
         username: newAdmin.username.trim(),
         email: newAdmin.email.trim(),
         mobileNumber: newAdmin.mobileNumber.trim(),
         password: newAdmin.password,
-        role: "ADMIN",
+        role: isSuperiorAdmin ? (newAdmin.role || "ADMIN") : "ADMIN",
         accountStatus: "ACTIVE",
       };
 
@@ -155,6 +183,7 @@ function Profile() {
         email: "",
         mobileNumber: "",
         password: "",
+        role: "ADMIN",
       });
 
       fetchAdmins();
@@ -192,6 +221,16 @@ function Profile() {
   };
 
   const handleDeleteAdmin = async (adm) => {
+    if (!isSuperiorAdmin) {
+      alert("Access Denied: Only the Superior Administrator can delete administrator accounts.");
+      return;
+    }
+
+    if (adm.employeeId === "ADMIN001") {
+      alert("Cannot delete the primary Superior Administrator account (ADMIN001).");
+      return;
+    }
+
     if (allAdmins.length <= 1) {
       alert("Cannot delete the only remaining administrator account.");
       return;
@@ -366,103 +405,140 @@ function Profile() {
 
           {/* All Administrators List */}
           <div className="admins-section">
-            <div className="admins-header">
-              <h2>All Administrators ({allAdmins.length})</h2>
+            <div className="admins-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div>
+                <h2 style={{ margin: 0 }}>All Administrators ({allAdmins.length})</h2>
+                <span style={{ fontSize: "12px", color: isSuperiorAdmin ? "#10b981" : "#64748b", fontWeight: "600" }}>
+                  {isSuperiorAdmin ? "👑 Superior Admin Privileges Active" : "Standard Admin Access"}
+                </span>
+              </div>
               <button
+                type="button"
                 className="add-admin-btn"
-                onClick={() => setShowAddAdmin(true)}
+                onClick={handleOpenAddAdmin}
               >
                 + Add Admin
               </button>
             </div>
 
-            <table className="admins-table">
-              <thead>
-                <tr>
-                  <th>Employee ID</th>
-                  <th>Username / Name</th>
-                  <th>Email</th>
-                  <th>Mobile Number</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {allAdmins.length > 0 ? (
-                  allAdmins.map((adm) => (
-                    <tr key={adm.id}>
-                      <td><strong>{adm.employeeId}</strong></td>
-                      <td>{adm.username}</td>
-                      <td>{adm.email}</td>
-                      <td>{adm.mobileNumber || "-"}</td>
-                      <td>{adm.role}</td>
-                      <td>
-                        <span className="status-badge">
-                          {adm.accountStatus || "ACTIVE"}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
-                          <button
-                            className="action-btn edit"
-                            onClick={() => {
-                              setAdminPasswordTarget(adm);
-                              setAdminNewPassword("");
-                              setAdminConfirmPassword("");
-                            }}
-                            title="Set New Password for this Admin"
-                            style={{ fontSize: "12px", padding: "6px 10px" }}
-                          >
-                            🔑 New Password
-                          </button>
-                          <button
-                            className="action-btn delete"
-                            onClick={() => handleDeleteAdmin(adm)}
-                            title="Delete Administrator"
-                            style={{ fontSize: "12px", padding: "6px 10px" }}
-                          >
-                            🗑️ Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
+            {/* Responsive Table Slidebar */}
+            <div
+              className="table-slidebar-container"
+              style={{
+                overflowX: "auto",
+                WebkitOverflowScrolling: "touch",
+                width: "100%",
+                marginTop: "15px",
+                paddingBottom: "8px",
+              }}
+            >
+              <table className="admins-table" style={{ minWidth: "750px", width: "100%" }}>
+                <thead>
                   <tr>
-                    <td><strong>{profile.employeeId || "ADMIN001"}</strong></td>
-                    <td>{profile.username}</td>
-                    <td>{profile.email}</td>
-                    <td>{profile.mobileNumber || "-"}</td>
-                    <td>ADMIN</td>
-                    <td><span className="status-badge">ACTIVE</span></td>
-                    <td><span style={{ color: "#94a3b8", fontSize: "12px" }}>Primary</span></td>
+                    <th>Admin ID</th>
+                    <th>Username / Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {allAdmins.length > 0 ? (
+                    allAdmins.map((adm) => (
+                      <tr key={adm.id}>
+                        <td><strong>{adm.employeeId}</strong></td>
+                        <td>{adm.username}</td>
+                        <td>{adm.email}</td>
+                        <td>{adm.mobileNumber || "-"}</td>
+                        <td>
+                          <span style={{ fontWeight: adm.role?.toUpperCase().includes("SUPER") ? "700" : "500", color: adm.role?.toUpperCase().includes("SUPER") ? "#1E88E5" : "inherit" }}>
+                            {adm.role || "ADMIN"}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="status-badge">
+                            {adm.accountStatus || "ACTIVE"}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
+                            <button
+                              type="button"
+                              className="action-btn edit"
+                              onClick={() => {
+                                setAdminPasswordTarget(adm);
+                                setAdminNewPassword("");
+                                setAdminConfirmPassword("");
+                              }}
+                              title="Set New Password for this Admin"
+                              style={{ fontSize: "12px", padding: "6px 10px" }}
+                            >
+                              🔑 New Password
+                            </button>
+
+                            {/* Only Superior Admin can delete accounts; primary Superior Admin and own account cannot be deleted */}
+                            {isSuperiorAdmin && adm.employeeId !== "ADMIN001" && adm.id !== profile.id && (
+                              <button
+                                type="button"
+                                className="action-btn delete"
+                                onClick={() => handleDeleteAdmin(adm)}
+                                title="Delete Administrator"
+                                style={{ fontSize: "12px", padding: "6px 10px" }}
+                              >
+                                🗑️ Delete
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td><strong>{profile.employeeId || "ADMIN001"}</strong></td>
+                      <td>{profile.username}</td>
+                      <td>{profile.email}</td>
+                      <td>{profile.mobileNumber || "-"}</td>
+                      <td>SUPER_ADMIN</td>
+                      <td><span className="status-badge">ACTIVE</span></td>
+                      <td><span style={{ color: "#94a3b8", fontSize: "12px" }}>Primary</span></td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Popup: Add Another Admin */}
       {showAddAdmin && (
-        <div className="popup-overlay">
-          <div className="popup-form">
+        <div className="popup-overlay" onClick={() => setShowAddAdmin(false)}>
+          <div className="popup-form" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px", width: "92vw" }}>
             <h2>Add New Administrator</h2>
             <p style={{ color: "#64748b", fontSize: "14px", marginTop: "-10px", marginBottom: "15px" }}>
-              Create an additional administrator account with full portal access.
+              Create an additional administrator account with portal access.
             </p>
 
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Admin ID (Auto-Generated)
+            </label>
             <input
               type="text"
-              placeholder="Admin Employee ID (e.g. ADMIN002)"
               value={newAdmin.employeeId}
-              onChange={(e) =>
-                setNewAdmin({ ...newAdmin, employeeId: e.target.value })
-              }
+              readOnly
+              style={{
+                background: "rgba(30,136,229,0.08)",
+                cursor: "not-allowed",
+                fontWeight: "700",
+                color: "#1E88E5",
+              }}
             />
 
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Full Name / Username *
+            </label>
             <input
               type="text"
               placeholder="Full Name / Username"
@@ -472,6 +548,9 @@ function Profile() {
               }
             />
 
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Email Address *
+            </label>
             <input
               type="email"
               placeholder="Email Address"
@@ -481,6 +560,9 @@ function Profile() {
               }
             />
 
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Mobile Number
+            </label>
             <input
               type="tel"
               placeholder="Mobile Number"
@@ -490,6 +572,9 @@ function Profile() {
               }
             />
 
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Admin Password *
+            </label>
             <input
               type="password"
               placeholder="Admin Password"
@@ -498,6 +583,28 @@ function Profile() {
                 setNewAdmin({ ...newAdmin, password: e.target.value })
               }
             />
+
+            <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+              Admin Role Level
+            </label>
+            {isSuperiorAdmin ? (
+              <select
+                className="filter-box"
+                style={{ width: "100%", marginBottom: "15px" }}
+                value={newAdmin.role || "ADMIN"}
+                onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value })}
+              >
+                <option value="ADMIN">Standard Administrator</option>
+                <option value="SUPER_ADMIN">Superior Administrator (Full Control)</option>
+              </select>
+            ) : (
+              <input
+                type="text"
+                value="Standard Administrator"
+                readOnly
+                style={{ background: "rgba(0,0,0,0.04)", cursor: "not-allowed", marginBottom: "15px" }}
+              />
+            )}
 
             <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
               <button className="add-btn" onClick={handleCreateAdmin}>

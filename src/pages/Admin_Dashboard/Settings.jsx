@@ -169,56 +169,63 @@ const handleReset = async () => {
 
             </div>
 
+            {/* Action Buttons with responsive flex wrap */}
             <div
+              className="settings-buttons-container"
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "30px",
+                flexWrap: "wrap",
+                gap: "12px",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginTop: "25px",
+                width: "100%",
               }}
             >
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "15px",
-                      justifyContent: "flex-end",
-                      marginTop: "30px",
-                    }}
-                  >
-                    <button
-                      className="add-btn"
-                      onClick={() => navigate("/settings/password")}
-                    >
-                      Change Password
-                    </button>
+              <button
+                type="button"
+                className="add-btn"
+                style={{ flex: "1 1 auto", minWidth: "140px" }}
+                onClick={() => navigate("/settings/password")}
+              >
+                Change Password
+              </button>
 
-                    <button
-                      className="add-btn"
-                      onClick={() => navigate("/settings/system")}
-                    >
-                      System Settings
-                    </button>
+              <button
+                type="button"
+                className="add-btn"
+                style={{ flex: "1 1 auto", minWidth: "140px" }}
+                onClick={() => navigate("/settings/system")}
+              >
+                System Settings
+              </button>
 
-                    <button
-                      className="add-btn"
-                      onClick={() => navigate("/settings/security")}
-                    >
-                      Security
-                    </button>
-                      <button
-                      className="add-btn"
-                      onClick={handleSave}
-                      >
-                      Save Settings
-                      </button>
+              <button
+                type="button"
+                className="add-btn"
+                style={{ flex: "1 1 auto", minWidth: "100px" }}
+                onClick={() => navigate("/settings/security")}
+              >
+                Security
+              </button>
 
-                    <button
-                    className="action-btn"
-                    onClick={handleReset}
-                    >
-                    Reset
-                    </button>
+              <button
+                type="button"
+                className="add-btn"
+                style={{ flex: "1 1 auto", minWidth: "130px", background: "#10b981" }}
+                onClick={handleSave}
+              >
+                Save Settings
+              </button>
 
-                  </div>
+              <button
+                type="button"
+                className="action-btn"
+                style={{ flex: "1 1 auto", minWidth: "90px" }}
+                onClick={handleReset}
+              >
+                Reset
+              </button>
             </div>
 
             {/* App Version & In-App Auto-Update System */}
@@ -227,8 +234,8 @@ const handleReset = async () => {
                 marginTop: "30px",
                 padding: "20px",
                 borderRadius: "12px",
-                background: "rgba(30, 136, 229, 0.05)",
-                border: "1px solid rgba(30, 136, 229, 0.2)",
+                background: theme === "dark" ? "rgba(30, 136, 229, 0.12)" : "rgba(30, 136, 229, 0.05)",
+                border: "1px solid rgba(30, 136, 229, 0.3)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -237,11 +244,11 @@ const handleReset = async () => {
               }}
             >
               <div>
-                <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: "var(--text-color, #1e293b)" }}>
+                <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: theme === "dark" ? "#f8fafc" : "#0f172a", fontWeight: "700" }}>
                   App Version & Updates
                 </h4>
-                <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
-                  Current Version: <strong>v{APP_VERSION} (Build {BUILD_NUMBER})</strong> • Auto-Update Enabled
+                <p style={{ margin: 0, fontSize: "13px", color: theme === "dark" ? "#cbd5e1" : "#475569" }}>
+                  Current Version: <strong style={{ color: theme === "dark" ? "#60a5fa" : "#1d4ed8" }}>v{APP_VERSION} (Build {BUILD_NUMBER})</strong> • Auto-Update Enabled
                 </p>
               </div>
               <button

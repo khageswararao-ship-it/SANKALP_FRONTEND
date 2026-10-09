@@ -7,7 +7,7 @@ import { loginUser } from "../api/loginApi";
 import { sendOtp } from "../api/otpApi";
 import { API_BASE_URL } from "../api/apiConfig";
 import AboutModal from "../components/AboutModal";
-import { FaInfoCircle, FaSun, FaMoon } from "react-icons/fa";
+import { FaInfoCircle, FaSun, FaMoon, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 
 function Login() {
@@ -17,6 +17,7 @@ function Login() {
   const [role, setRole] = useState("admin");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -172,17 +173,42 @@ function Login() {
             }}
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            disabled={isLoading}
-            autoComplete="current-password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrorMessage("");
-            }}
-          />
+          <div style={{ position: "relative", width: "100%", marginBottom: "15px" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              disabled={isLoading}
+              autoComplete="current-password"
+              style={{ width: "100%", paddingRight: "45px", marginBottom: 0 }}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorMessage("");
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              style={{
+                position: "absolute",
+                right: "14px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "#64748b",
+                fontSize: "18px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "4px",
+              }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
 
           <div style={{ textAlign: "right", marginBottom: "15px" }}>
             <span

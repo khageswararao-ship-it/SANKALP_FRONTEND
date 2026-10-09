@@ -1,14 +1,19 @@
 {
-  "version": "1.1.0",
-  "build": 8,
+  "version": "1.2.0",
+  "build": 9,
   "releaseDate": "2026-10-09",
-  "title": "Sankalp IP HRMS v1.1.0 Live Update",
-  "description": "Critical fixes, employee settings restoration, and instant in-app update sync engine.",
+  "title": "Sankalp_IP HRMS v1.2.0 Complete Update",
+  "description": "Comprehensive UI enhancements, Superior Admin permissions, department payroll & attendance, and mobile usability fixes.",
   "releaseNotes": [
-    "Resolved Employee Settings navigation and runtime references",
-    "Enabled instant In-App Update Engine: update with 1 click without redownloading APK",
-    "Added manual 'Check for Updates' in Settings and About panels",
-    "Performance tuning, responsive mobile drawers, and dark mode optimizations"
+    "Google Search Console ownership verification file integrated",
+    "Enhanced SEO keywords for 'Sankalp_IP'",
+    "View/hide eye toggle button added to Login and Reset Password fields",
+    "Auto-generated Employee & Admin IDs (no manual typing required)",
+    "Corporate department dropdowns across Employees, Payroll, and Attendance",
+    "Empty state handling for Leaves with original Employee IDs preserved",
+    "Superior Admin security: only Superior Admin can delete accounts or assign Super Admin status",
+    "Smooth horizontal slidebar for mobile tables",
+    "Fixed attendance overview analytics and cleaned Dashboard"
   ],
   "forceUpdate": false,
   "downloadUrl": "https://github.com/khageswararao-ship-it/SANKALP_FRONTEND/releases/latest"

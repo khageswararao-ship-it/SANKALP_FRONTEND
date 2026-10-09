@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { adminResetPassword } from "../api/adminResetPasswordApi";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../assets/logo.svg";
 import background from "../assets/background.png";
 import "../styles/login.css";
@@ -14,6 +15,8 @@ function AdminResetPassword() {
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPass, setShowPass] = useState(false);
+    const [showConfirmPass, setShowConfirmPass] = useState(false);
 
     const handleReset = async () => {
 
@@ -58,19 +61,61 @@ function AdminResetPassword() {
                 <h1>Sankalp IP</h1>
                 <p>Admin Password Reset</p>
 
-                <input
-                    type="password"
-                    placeholder="New Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <div style={{ position: "relative", width: "100%", marginBottom: "15px" }}>
+                    <input
+                        type={showPass ? "text" : "password"}
+                        placeholder="New Password"
+                        value={password}
+                        style={{ width: "100%", paddingRight: "45px", marginBottom: 0 }}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPass((prev) => !prev)}
+                        style={{
+                            position: "absolute",
+                            right: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#64748b",
+                            fontSize: "18px",
+                            padding: "4px",
+                        }}
+                    >
+                        {showPass ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                </div>
 
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                <div style={{ position: "relative", width: "100%", marginBottom: "20px" }}>
+                    <input
+                        type={showConfirmPass ? "text" : "password"}
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        style={{ width: "100%", paddingRight: "45px", marginBottom: 0 }}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowConfirmPass((prev) => !prev)}
+                        style={{
+                            position: "absolute",
+                            right: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#64748b",
+                            fontSize: "18px",
+                            padding: "4px",
+                        }}
+                    >
+                        {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                </div>
 
                 <button onClick={handleReset}>
                     Reset Password

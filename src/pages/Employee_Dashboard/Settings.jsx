@@ -14,8 +14,10 @@ import {
 import { createPasswordChangeRequest } from "../../api/passwordChangeRequestApi";
 import { FaSyncAlt } from "react-icons/fa";
 import { APP_VERSION, BUILD_NUMBER } from "../../config/version";
+import { useTheme } from "../../context/ThemeContext";
 
 function Settings() {
+  const { theme } = useTheme();
   const employeeId = localStorage.getItem("employeeId");
   const [settings, setSettings] = useState({
     currentUsername: "",
@@ -305,8 +307,8 @@ const handleReset = () => {
                 marginTop: "30px",
                 padding: "20px",
                 borderRadius: "12px",
-                background: "rgba(30, 136, 229, 0.05)",
-                border: "1px solid rgba(30, 136, 229, 0.2)",
+                background: theme === "dark" ? "rgba(30, 136, 229, 0.12)" : "rgba(30, 136, 229, 0.05)",
+                border: "1px solid rgba(30, 136, 229, 0.3)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -315,11 +317,11 @@ const handleReset = () => {
               }}
             >
               <div>
-                <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: "var(--text-color, #1e293b)" }}>
+                <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: theme === "dark" ? "#f8fafc" : "#0f172a", fontWeight: "700" }}>
                   App Version & Updates
                 </h4>
-                <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
-                  Current Version: <strong>v{APP_VERSION} (Build {BUILD_NUMBER})</strong> • Auto-Update Enabled
+                <p style={{ margin: 0, fontSize: "13px", color: theme === "dark" ? "#cbd5e1" : "#475569" }}>
+                  Current Version: <strong style={{ color: theme === "dark" ? "#60a5fa" : "#1d4ed8" }}>v{APP_VERSION} (Build {BUILD_NUMBER})</strong> • Auto-Update Enabled
                 </p>
               </div>
               <button
