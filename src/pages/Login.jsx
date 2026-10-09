@@ -1,64 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import background from "../assets/background.png";
 import "../styles/login.css";
 import { loginUser } from "../api/loginApi";
 import { sendOtp } from "../api/otpApi";
+import { API_BASE_URL } from "../api/apiConfig";
+import AboutModal from "../components/AboutModal";
+import { FaInfoCircle, FaSun, FaMoon } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const [role, setRole] = useState("admin");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [serverWakingUp, setServerWakingUp] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
-const handleLogin = async () => {
-  console.log("1. Login button clicked");
+  // Background wakeup ping as soon as Login screen appears
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/login`, { method: "GET" }).catch(() => {});
+  }, []);
 
-  try {
-    const user = await loginUser({
-      username,
-      password,
-      role: role.toUpperCase(),
-    });
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault();
 
-    console.log("2. API Response:", user);
-    console.log("Employee ID =", user.employeeId);
+    setErrorMessage("");
+    setSuccessMessage("");
 
-    if (!user) {
-      console.log("3. User is null");
-      alert("Invalid Username or Password");
+    // Instant client-side validation
+    if (!username.trim() || !password.trim()) {
+      setErrorMessage("Please enter both username and password.");
       return;
     }
 
-    console.log("4. User Role:", user.role);
+    setIsLoading(true);
+    setServerWakingUp(false);
 
-    if (user.role.toUpperCase() === "ADMIN") {
-      console.log("5. Going to Admin Dashboard");
-      navigate("/admin/dashboard");
+    // If request takes longer than 2.5 seconds, notify user that server is waking up
+    const wakeUpTimer = setTimeout(() => {
+      setServerWakingUp(true);
+    }, 2500);
+
+    try {
+      const user = await loginUser({
+        username: username.trim(),
+        password: password,
+        role: role.toUpperCase(),
+      });
+
+      clearTimeout(wakeUpTimer);
+      setServerWakingUp(false);
+
+      if (!user || !user.role) {
+        setIsLoading(false);
+        setErrorMessage("Invalid Username or Password. Please check your credentials.");
+        return;
+      }
+
+      setSuccessMessage("Login successful! Redirecting...");
+
+      if (user.role.toUpperCase() === "ADMIN") {
+        setTimeout(() => navigate("/admin/dashboard"), 250);
       } else if (user.role.toUpperCase() === "EMPLOYEE") {
-
-        // Save employee details
         localStorage.setItem("employeeId", user.employeeId);
         localStorage.setItem("username", user.username);
         localStorage.setItem("role", user.role);
-
-        
-        console.log("Saved Employee ID:", localStorage.getItem("employeeId"));
 
         // Send OTP in background without blocking screen navigation
         sendOtp(user.employeeId).catch((otpError) => {
           console.warn("Could not dispatch OTP email:", otpError);
         });
 
-        navigate("/employee/otp");
+        setTimeout(() => navigate("/employee/otp"), 250);
+      } else {
+        setIsLoading(false);
+        setErrorMessage("Unrecognized user role. Please contact system administrator.");
       }
-  } catch (error) {
-    console.error("Login Error:", error);
-    alert("Login failed. Please check your credentials or network.");
-  }
-};
+    } catch (error) {
+      clearTimeout(wakeUpTimer);
+      setServerWakingUp(false);
+      setIsLoading(false);
+      console.error("Login Error:", error);
+      setErrorMessage("Server error or connection timed out. Please try again.");
+    }
+  };
 
   return (
     <div
@@ -66,56 +98,134 @@ const handleLogin = async () => {
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="login-card">
-        <img src={logo} alt="Logo" className="login-logo" />
+        {/* Top Controls: Dark Mode & About */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+          <button
+            type="button"
+            className="login-theme-btn"
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <FaSun style={{ color: "#ffd54f" }} /> : <FaMoon />}
+          </button>
+          <button
+            type="button"
+            className="login-about-btn"
+            onClick={() => setShowAbout(true)}
+            title="About App & Developer"
+            aria-label="About app"
+          >
+            <FaInfoCircle /> About App
+          </button>
+        </div>
+
+        <img src={logo} alt="Sankalp IP Logo" className="login-logo" />
 
         <h1>Sankalp IP</h1>
         <p>HRMS Portal</p>
 
-        <select
-          className="login-select"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="admin">Admin</option>
-          <option value="employee">Employee</option>
-        </select>
+        {/* Instant Error Alert */}
+        {errorMessage && (
+          <div className="login-alert error-alert" role="alert">
+            {errorMessage}
+          </div>
+        )}
 
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        {/* Instant Success Alert */}
+        {successMessage && (
+          <div className="login-alert success-alert" role="alert">
+            {successMessage}
+          </div>
+        )}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        {/* Server Wakeup Notification */}
+        {serverWakingUp && !errorMessage && (
+          <div className="login-alert info-alert" role="status">
+            ⏳ Connecting to cloud server, please wait...
+          </div>
+        )}
 
-        <div style={{ textAlign: "right", marginBottom: "15px" }}>
-          <span
-          onClick={() => {
-              if (role === "admin") {
-                  navigate("/admin/forgot-password");
-              } else {
-                  navigate("/forgot-password");
-              }
-          }}
-            style={{
-              color: "#2563eb",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "600"
+        <form onSubmit={handleLogin} noValidate>
+          <select
+            className="login-select"
+            value={role}
+            disabled={isLoading}
+            onChange={(e) => {
+              setRole(e.target.value);
+              setErrorMessage("");
             }}
           >
-            Forgot Password?
-          </span>
-        </div>
+            <option value="admin">Admin Portal</option>
+            <option value="employee">Employee Portal</option>
+          </select>
 
-        <button onClick={handleLogin}>Login</button>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            disabled={isLoading}
+            autoComplete="username"
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setErrorMessage("");
+            }}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            disabled={isLoading}
+            autoComplete="current-password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setErrorMessage("");
+            }}
+          />
+
+          <div style={{ textAlign: "right", marginBottom: "15px" }}>
+            <span
+              onClick={() => {
+                if (role === "admin") {
+                  navigate("/admin/forgot-password");
+                } else {
+                  navigate("/forgot-password");
+                }
+              }}
+              style={{
+                color: "#2563eb",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: "600",
+              }}
+            >
+              Forgot Password?
+            </span>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`login-submit-btn ${isLoading ? "loading" : ""}`}
+          >
+            {isLoading ? (
+              <span className="btn-loading-content">
+                <span className="spinner"></span>
+                <span>Verifying...</span>
+              </span>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
+
+        <div style={{ marginTop: "20px", fontSize: "12px", color: "#64748b" }}>
+          Developed by <strong>Ravada Khageswar Rao</strong>
+        </div>
       </div>
+
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>
   );
 }

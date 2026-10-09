@@ -235,3 +235,135 @@ body {
     gap: 14px;
   }
 }
+
+/* ==========================================================================
+   DARK THEME SYSTEM
+   ========================================================================== */
+body.dark-theme {
+  background:
+    linear-gradient(rgba(5, 10, 20, 0.88), rgba(5, 10, 20, 0.88)),
+    url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f1f5f9;
+}
+
+body.dark-theme .page-content {
+  background:
+    linear-gradient(rgba(10, 18, 35, 0.85), rgba(10, 18, 35, 0.85)),
+    url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  color: #f1f5f9;
+}
+
+body.dark-theme .header {
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+body.dark-theme .header-title,
+body.dark-theme .header h1 {
+  color: #f8fafc;
+}
+
+body.dark-theme .page-title {
+  color: #60a5fa !important;
+}
+
+body.dark-theme .card,
+body.dark-theme .dashboard-card,
+body.dark-theme .chart-card,
+body.dark-theme .recent-card,
+body.dark-theme .table-container,
+body.dark-theme .welcome-card,
+body.dark-theme .dashboard-box,
+body.dark-theme .attendance-progress,
+body.dark-theme .leave-form,
+body.dark-theme .payroll-card,
+body.dark-theme .profile-card,
+body.dark-theme .popup-form {
+  background: rgba(26, 38, 64, 0.96) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-theme .card-info h2,
+body.dark-theme .chart-card h3,
+body.dark-theme .recent-card h3,
+body.dark-theme .welcome-card h2,
+body.dark-theme .dashboard-box h3,
+body.dark-theme .popup-form h2 {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .card-info h3,
+body.dark-theme .recent-card li,
+body.dark-theme .dashboard-box li,
+body.dark-theme .welcome-card p {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .search-box,
+body.dark-theme .filter-box,
+body.dark-theme .search-input,
+body.dark-theme .popup-form input,
+body.dark-theme .popup-form select,
+body.dark-theme .popup-form textarea,
+body.dark-theme .leave-grid input,
+body.dark-theme .leave-grid select,
+body.dark-theme .leave-form textarea,
+body.dark-theme .profile-input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .employee-table td,
+body.dark-theme .admins-table td,
+body.dark-theme table td {
+  border-bottom: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-theme .employee-table tr:hover,
+body.dark-theme .admins-table tr:hover,
+body.dark-theme table tr:hover {
+  background: rgba(51, 65, 85, 0.35) !important;
+}
+
+body.dark-theme .table-container::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+body.dark-theme .table-container::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+}
+
+body.dark-theme .profile-row {
+  border-bottom-color: #334155;
+}
+
+body.dark-theme .profile-row strong {
+  color: #94a3b8;
+}
+
+body.dark-theme .profile-row span {
+  color: #f8fafc;
+}
+
+body.dark-theme .salary-row {
+  border-bottom-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-theme .salary-row.total {
+  color: #60a5fa;
+}
+
+body.dark-theme .progress-bar {
+  background: #334155;
+}

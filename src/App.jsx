@@ -50,15 +50,22 @@ import MyAttendance from "./pages/Employee_Dashboard/MyAttendance";
 import EmployeeNotifications from "./pages/Employee_Dashboard/Notifications";
 import MyLeave from "./pages/Employee_Dashboard/MyLeave";
 import MyPayroll from "./pages/Employee_Dashboard/MyPayroll";
-import EmployeeSettings from "./pages/Employee_Dashboard/Settings";
 import OTPVerification from "./pages/Employee_Dashboard/OTPVerification";
 import { SidebarProvider } from "./context/SidebarContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { API_BASE_URL } from "./api/apiConfig";
 
 function App() {
+  React.useEffect(() => {
+    // Background pre-warming ping so Render backend is ready immediately
+    fetch(`${API_BASE_URL}/api/login`, { method: "GET" }).catch(() => {});
+  }, []);
+
   return (
     <BrowserRouter>
-      <SidebarProvider>
-        <Routes>
+      <ThemeProvider>
+        <SidebarProvider>
+          <Routes>
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Login */}
@@ -147,7 +154,8 @@ function App() {
         <Route path="/employee/otp" element={<OTPVerification />}/>
 
       </Routes>
-      </SidebarProvider>
+        </SidebarProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

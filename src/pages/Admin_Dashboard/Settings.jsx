@@ -8,10 +8,11 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
 import "../../styles/Dashboard.css";
+import { useTheme } from "../../context/ThemeContext";
 
 function Settings() {
-
- const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { theme, setThemeMode } = useTheme();
 
   const [settings, setSettings] = useState({
   companyName: "",
@@ -137,15 +138,14 @@ const handleReset = async () => {
             <div className="employee-toolbar">
 
               <select
-                      className="filter-box"
-                      value={settings.theme}
-                      onChange={(e)=>
-                      setSettings({
-                      ...settings,
-                      theme:e.target.value,
-                      })
-                      }
-                      >
+                className="filter-box"
+                value={theme === "dark" ? "Dark Theme" : "Light Theme"}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSettings({ ...settings, theme: val });
+                  setThemeMode(val);
+                }}
+              >
                 <option>Light Theme</option>
                 <option>Dark Theme</option>
               </select>

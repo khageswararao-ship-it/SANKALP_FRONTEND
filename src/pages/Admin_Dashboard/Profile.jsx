@@ -4,12 +4,15 @@ import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
 import "../../styles/Profile.css";
 import admin from "../../assets/admin.png";
-import { getProfile, updateProfile, getAllAdmins, addAdmin } from "../../api/profileApi";
+import { getProfile, updateProfile, getAllAdmins, addAdmin, deleteAdmin, updateAdminAccount } from "../../api/profileApi";
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showAddAdmin, setShowAddAdmin] = useState(false);
+  const [adminPasswordTarget, setAdminPasswordTarget] = useState(null);
+  const [adminNewPassword, setAdminNewPassword] = useState("");
+  const [adminConfirmPassword, setAdminConfirmPassword] = useState("");
 
   const [profile, setProfile] = useState({
     id: null,
@@ -158,6 +161,53 @@ function Profile() {
     } catch (error) {
       console.error("Error adding new admin:", error);
       alert("Failed to add administrator. Username might already exist.");
+    }
+  };
+
+  const handleResetAdminPassword = async () => {
+    if (!adminNewPassword || !adminConfirmPassword) {
+      alert("Please enter the new password in both fields.");
+      return;
+    }
+    if (adminNewPassword !== adminConfirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      await updateAdminAccount(adminPasswordTarget.id, {
+        ...adminPasswordTarget,
+        password: adminNewPassword,
+      });
+
+      alert(`Password for administrator "${adminPasswordTarget.username}" updated successfully!`);
+      setAdminPasswordTarget(null);
+      setAdminNewPassword("");
+      setAdminConfirmPassword("");
+      fetchAdmins();
+    } catch (error) {
+      console.error("Error resetting admin password:", error);
+      alert("Failed to update administrator password.");
+    }
+  };
+
+  const handleDeleteAdmin = async (adm) => {
+    if (allAdmins.length <= 1) {
+      alert("Cannot delete the only remaining administrator account.");
+      return;
+    }
+
+    if (!window.confirm(`Are you sure you want to delete administrator "${adm.username}" (${adm.employeeId})?\n\nThis will permanently revoke their access.`)) {
+      return;
+    }
+
+    try {
+      await deleteAdmin(adm.id);
+      alert(`Administrator "${adm.username}" deleted successfully.`);
+      fetchAdmins();
+    } catch (error) {
+      console.error("Error deleting administrator:", error);
+      alert("Failed to delete administrator.");
     }
   };
 
@@ -335,6 +385,7 @@ function Profile() {
                   <th>Mobile Number</th>
                   <th>Role</th>
                   <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -351,6 +402,30 @@ function Profile() {
                           {adm.accountStatus || "ACTIVE"}
                         </span>
                       </td>
+                      <td>
+                        <div style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
+                          <button
+                            className="action-btn edit"
+                            onClick={() => {
+                              setAdminPasswordTarget(adm);
+                              setAdminNewPassword("");
+                              setAdminConfirmPassword("");
+                            }}
+                            title="Set New Password for this Admin"
+                            style={{ fontSize: "12px", padding: "6px 10px" }}
+                          >
+                            🔑 New Password
+                          </button>
+                          <button
+                            className="action-btn delete"
+                            onClick={() => handleDeleteAdmin(adm)}
+                            title="Delete Administrator"
+                            style={{ fontSize: "12px", padding: "6px 10px" }}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))
                 ) : (
@@ -361,6 +436,7 @@ function Profile() {
                     <td>{profile.mobileNumber || "-"}</td>
                     <td>ADMIN</td>
                     <td><span className="status-badge">ACTIVE</span></td>
+                    <td><span style={{ color: "#94a3b8", fontSize: "12px" }}>Primary</span></td>
                   </tr>
                 )}
               </tbody>
@@ -486,6 +562,48 @@ function Profile() {
                 onClick={() => {
                   setShowPassword(false);
                   setPassword({ current: "", new: "", confirm: "" });
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Popup: Reset Specific Admin Password */}
+      {adminPasswordTarget && (
+        <div className="popup-overlay">
+          <div className="popup-form">
+            <h2>Set Password for {adminPasswordTarget.username}</h2>
+            <p style={{ color: "#64748b", fontSize: "13px", marginTop: "-6px", marginBottom: "14px" }}>
+              Employee ID: <strong>{adminPasswordTarget.employeeId}</strong> • Email: <strong>{adminPasswordTarget.email}</strong>
+            </p>
+
+            <input
+              type="password"
+              placeholder="Enter New Password"
+              value={adminNewPassword}
+              onChange={(e) => setAdminNewPassword(e.target.value)}
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              value={adminConfirmPassword}
+              onChange={(e) => setAdminConfirmPassword(e.target.value)}
+            />
+
+            <div style={{ display: "flex", gap: "10px", marginTop: "15px", justifyContent: "flex-end" }}>
+              <button className="add-btn" onClick={handleResetAdminPassword}>
+                Save Password
+              </button>
+              <button
+                className="action-btn delete"
+                onClick={() => {
+                  setAdminPasswordTarget(null);
+                  setAdminNewPassword("");
+                  setAdminConfirmPassword("");
                 }}
               >
                 Cancel

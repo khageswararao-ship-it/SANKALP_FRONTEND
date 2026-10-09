@@ -4,8 +4,11 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
 import "../../styles/Dashboard.css";
+import { useTheme } from "../../context/ThemeContext";
 
 function SystemSettings() {
+  const { theme, setThemeMode } = useTheme();
+
   return (
     <div className="layout">
       <Sidebar activePage="Settings" />
@@ -19,9 +22,13 @@ function SystemSettings() {
 
           <div className="table-container" style={{ padding: "30px" }}>
 
-            <label>Theme</label>
+            <label style={{ fontWeight: 600, display: "block", marginBottom: "8px" }}>Theme</label>
 
-            <select className="filter-box">
+            <select
+              className="filter-box"
+              value={theme === "dark" ? "Dark" : "Light"}
+              onChange={(e) => setThemeMode(e.target.value)}
+            >
               <option>Light</option>
               <option>Dark</option>
             </select>
