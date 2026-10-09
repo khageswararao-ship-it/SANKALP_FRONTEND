@@ -12,6 +12,8 @@ import {
 } from "../../api/employeeSettingsApi";
 
 import { createPasswordChangeRequest } from "../../api/passwordChangeRequestApi";
+import { FaSyncAlt } from "react-icons/fa";
+import { APP_VERSION, BUILD_NUMBER } from "../../config/version";
 
 function Settings() {
   const employeeId = localStorage.getItem("employeeId");
@@ -294,6 +296,49 @@ const handleReset = () => {
                 onClick={handleReset}
               >
                 Reset
+              </button>
+            </div>
+
+            {/* App Version & In-App Auto-Update System */}
+            <div
+              style={{
+                marginTop: "30px",
+                padding: "20px",
+                borderRadius: "12px",
+                background: "rgba(30, 136, 229, 0.05)",
+                border: "1px solid rgba(30, 136, 229, 0.2)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "15px",
+              }}
+            >
+              <div>
+                <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: "var(--text-color, #1e293b)" }}>
+                  App Version & Updates
+                </h4>
+                <p style={{ margin: 0, fontSize: "13px", color: "#64748b" }}>
+                  Current Version: <strong>v{APP_VERSION} (Build {BUILD_NUMBER})</strong> • Auto-Update Enabled
+                </p>
+              </div>
+              <button
+                type="button"
+                className="add-btn"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 18px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  if (typeof window.checkForAppUpdates === "function") {
+                    window.checkForAppUpdates(true);
+                  }
+                }}
+              >
+                <FaSyncAlt /> Check for Updates
               </button>
             </div>
 

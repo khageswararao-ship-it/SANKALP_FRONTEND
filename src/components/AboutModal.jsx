@@ -1,9 +1,16 @@
 import React from "react";
-import { FaTimes, FaUserCheck, FaCode, FaServer, FaMobileAlt, FaGlobe, FaShieldAlt } from "react-icons/fa";
+import { FaTimes, FaUserCheck, FaCode, FaServer, FaMobileAlt, FaShieldAlt, FaSyncAlt } from "react-icons/fa";
 import logo from "../assets/logo.svg";
+import { APP_VERSION, BUILD_NUMBER, DEVELOPER_NAME } from "../config/version";
 
 function AboutModal({ isOpen, onClose }) {
   if (!isOpen) return null;
+
+  const handleCheckUpdates = () => {
+    if (typeof window.checkForAppUpdates === "function") {
+      window.checkForAppUpdates(true);
+    }
+  };
 
   return (
     <div className="popup-overlay" onClick={onClose} style={{ zIndex: 2000 }}>
@@ -49,18 +56,20 @@ function AboutModal({ isOpen, onClose }) {
           <h2 style={{ margin: "4px 0", color: "#1E88E5", fontSize: "24px" }}>
             Sankalp IP HRMS
           </h2>
-          <span
-            style={{
-              fontSize: "12px",
-              background: "rgba(30,136,229,0.12)",
-              color: "#1E88E5",
-              padding: "4px 10px",
-              borderRadius: "20px",
-              fontWeight: 600,
-            }}
-          >
-            Version 1.0.0 Enterprise
-          </span>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "6px" }}>
+            <span
+              style={{
+                fontSize: "12px",
+                background: "rgba(30,136,229,0.12)",
+                color: "#1E88E5",
+                padding: "4px 10px",
+                borderRadius: "20px",
+                fontWeight: 600,
+              }}
+            >
+              Version {APP_VERSION} (Build {BUILD_NUMBER})
+            </span>
+          </div>
         </div>
 
         <div
@@ -76,7 +85,7 @@ function AboutModal({ isOpen, onClose }) {
             <FaUserCheck color="#1E88E5" /> Developer & Architect
           </h4>
           <p style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: "700", color: "#1E3A8A" }}>
-            Ravada Khageswar Rao
+            {DEVELOPER_NAME}
           </p>
           <p style={{ margin: "0", fontSize: "13px", color: "#64748b" }}>
             Lead Full-Stack Developer & Mobile Engineer
@@ -103,9 +112,33 @@ function AboutModal({ isOpen, onClose }) {
           </div>
         </div>
 
+        {/* Check for Updates Action */}
+        <div style={{ textAlign: "center", marginBottom: "16px" }}>
+          <button
+            type="button"
+            onClick={handleCheckUpdates}
+            style={{
+              background: "#f1f5f9",
+              border: "1px solid #cbd5e1",
+              borderRadius: "8px",
+              padding: "9px 18px",
+              fontSize: "13.5px",
+              fontWeight: "600",
+              color: "#1e293b",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <FaSyncAlt color="#1E88E5" /> Check for App Updates
+          </button>
+        </div>
+
         <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "14px", textAlign: "center" }}>
           <p style={{ margin: "0", fontSize: "12px", color: "#94a3b8" }}>
-            © {new Date().getFullYear()} Sankalp IP. Built with pride by Ravada Khageswar Rao.
+            © {new Date().getFullYear()} Sankalp IP. Built with pride by {DEVELOPER_NAME}.
           </p>
         </div>
       </div>

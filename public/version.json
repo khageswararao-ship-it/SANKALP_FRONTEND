@@ -1,0 +1,15 @@
+{
+  "version": "1.1.0",
+  "build": 8,
+  "releaseDate": "2026-10-09",
+  "title": "Sankalp IP HRMS v1.1.0 Live Update",
+  "description": "Critical fixes, employee settings restoration, and instant in-app update sync engine.",
+  "releaseNotes": [
+    "Resolved Employee Settings navigation and runtime references",
+    "Enabled instant In-App Update Engine: update with 1 click without redownloading APK",
+    "Added manual 'Check for Updates' in Settings and About panels",
+    "Performance tuning, responsive mobile drawers, and dark mode optimizations"
+  ],
+  "forceUpdate": false,
+  "downloadUrl": "https://github.com/khageswararao-ship-it/SANKALP_FRONTEND/releases/latest"
+}
