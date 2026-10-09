@@ -264,6 +264,17 @@ function Profile() {
     }
   };
 
+  const displayedAdmins = (allAdmins && allAdmins.length > 0 ? allAdmins : [profile]).filter((adm) => {
+    const isRowSuperior =
+      adm.employeeId === "ADMIN001" ||
+      allAdmins.length <= 1 ||
+      String(adm.role || "").toUpperCase().includes("SUPER") ||
+      String(adm.username || "").toLowerCase().includes("khageswar");
+    if (adminTabFilter === "SUPERIOR") return isRowSuperior;
+    if (adminTabFilter === "STANDARD") return !isRowSuperior;
+    return true;
+  });
+
   return (
     <div className="layout">
       <Sidebar activePage="Profile" />

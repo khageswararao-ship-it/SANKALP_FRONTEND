@@ -1,9 +1,9 @@
 {
-  "version": "1.2.1",
-  "build": 10,
+  "version": "1.2.2",
+  "build": 11,
   "releaseDate": "2026-10-09",
-  "title": "Sankalp_IP HRMS v1.2.1 UI & Mobile Slidebar Release",
-  "description": "True Pie Chart for Attendance Overview, mobile touch slidebars for Admin and Employee settings, Superior Admin badge & security.",
+  "title": "Sankalp_IP HRMS v1.2.2 Stable Release",
+  "description": "Resolved displayedAdmins runtime reference error, full classic attendance pie chart, and mobile slidebars under all tables.",
   "releaseNotes": [
     "Full classic solid Pie Chart with animated tooltips for Attendance Overview",
     "Interactive touch-friendly slidebars in Employee Settings and Admin Profile",
