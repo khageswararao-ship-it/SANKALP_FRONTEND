@@ -78,9 +78,11 @@ function Attendance() {
 
   // Filter Records by search, department, status, and date
   const filteredAttendance = attendance.filter((record) => {
+    const query = (search || "").trim().toLowerCase();
     const searchMatch =
-      (record.employeeId || "").toLowerCase().includes(search.toLowerCase()) ||
-      (record.employeeName || "").toLowerCase().includes(search.toLowerCase());
+      !query ||
+      String(record.employeeId || "").toLowerCase().includes(query) ||
+      String(record.employeeName || "").toLowerCase().includes(query);
 
     const departmentMatch =
       departmentFilter === "" || record.department === departmentFilter;
@@ -102,16 +104,18 @@ function Attendance() {
     const deptEmployees = employeesList.filter((e) => e.department === initialDept);
     const firstEmp = deptEmployees[0] || employeesList[0];
 
-    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+    const liveTime = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const autoStatus = (now.getHours() * 60 + now.getMinutes()) <= 570 ? "Present" : "Late";
 
     setNewAttendance({
       employeeId: firstEmp ? firstEmp.id : "",
       employeeName: firstEmp ? firstEmp.name : "",
       department: firstEmp ? (firstEmp.department || initialDept) : initialDept,
       date: today,
-      checkIn: "09:00 AM",
-      checkOut: "06:00 PM",
-      status: "Present",
+      checkIn: liveTime,
+      status: autoStatus,
     });
 
     setShowForm(true);
@@ -157,11 +161,23 @@ function Attendance() {
       return;
     }
 
+    // 24-hour reset: check if employee already checked in on this date
+    const alreadyLogged = attendance.find(
+      (a) =>
+        String(a.employeeId).toLowerCase() === String(newAttendance.employeeId).toLowerCase() &&
+        a.date === newAttendance.date
+    );
+
+    if (alreadyLogged && !isEditing) {
+      alert(`⚠️ Duplicate Entry: Employee "${newAttendance.employeeName}" (${newAttendance.employeeId}) has already checked in for today (${newAttendance.date}) at ${alreadyLogged.checkIn}.\n\nAttendance can only be registered once per calendar day.`);
+      return;
+    }
+
     try {
       await addAttendance(newAttendance);
       await fetchAttendance();
       setShowForm(false);
-      alert("Attendance Marked Successfully!");
+      alert(`✅ Attendance marked successfully for ${newAttendance.employeeName}! Status: ${newAttendance.status}`);
     } catch (error) {
       console.error("Error marking attendance:", error);
       alert("Failed to mark attendance.");
@@ -390,33 +406,22 @@ function Attendance() {
                   }
                 />
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
-                  <div>
-                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
-                      Check-In Time
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="09:00 AM"
-                      value={newAttendance.checkIn}
-                      onChange={(e) =>
-                        setNewAttendance({ ...newAttendance, checkIn: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
-                      Check-Out Time
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="06:00 PM"
-                      value={newAttendance.checkOut}
-                      onChange={(e) =>
-                        setNewAttendance({ ...newAttendance, checkOut: e.target.value })
-                      }
-                    />
-                  </div>
+                <div style={{ marginBottom: "14px" }}>
+                  <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
+                    Check-In Time (Live with Seconds)
+                  </label>
+                  <input
+                    type="text"
+                    value={newAttendance.checkIn}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setNewAttendance({ ...newAttendance, checkIn: val });
+                    }}
+                    placeholder="09:15:30 AM"
+                  />
+                  <small style={{ color: "#64748b", fontSize: "11px", display: "block", marginTop: "3px" }}>
+                    ⏰ Automatic Rule: Check-in before or at 09:30 AM is <strong>Present</strong>; after 09:30 AM is <strong>Late</strong>.
+                  </small>
                 </div>
 
                 <label style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginBottom: "4px", display: "block" }}>
@@ -492,8 +497,7 @@ function Attendance() {
                   <th>Employee Name</th>
                   <th>Department</th>
                   <th>Date</th>
-                  <th>Check In</th>
-                  <th>Check Out</th>
+                  <th>Check-In Time</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -506,8 +510,7 @@ function Attendance() {
                       <td>{record.employeeName}</td>
                       <td>{record.department || "-"}</td>
                       <td>{record.date}</td>
-                      <td>{record.checkIn || "-"}</td>
-                      <td>{record.checkOut || "-"}</td>
+                      <td><strong>{record.checkIn || "-"}</strong></td>
                       <td>
                         <span
                           className={`status ${

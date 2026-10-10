@@ -200,6 +200,45 @@
     }
 
     .quick-actions{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2, 1fr);
     }
+}
+
+/* Dark Mode Overrides for Employee Dashboard */
+body.dark-theme .welcome-card,
+body.dark-theme .dashboard-card,
+body.dark-theme .attendance-progress,
+body.dark-theme .dashboard-box {
+    background: rgba(15, 23, 42, 0.94) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.1) !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .welcome-card h2,
+body.dark-theme .welcome-date h3,
+body.dark-theme .dashboard-box h3 {
+    color: #38bdf8 !important;
+}
+
+body.dark-theme .welcome-card p,
+body.dark-theme .welcome-date p,
+body.dark-theme .dashboard-card h3,
+body.dark-theme .dashboard-box li {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .dashboard-card h2 {
+    color: #00f2fe !important;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+}
+
+body.dark-theme .action-btn {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+body.dark-theme .action-btn:hover {
+    background: linear-gradient(135deg, #0369a1, #1d4ed8);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
 }

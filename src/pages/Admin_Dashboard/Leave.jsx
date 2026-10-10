@@ -76,9 +76,11 @@ function Leave() {
   const rejected = leaveData.filter((l) => l.status === "Rejected").length;
 
   const filteredLeave = leaveData.filter((leave) => {
+    const query = (search || "").trim().toLowerCase();
     const searchMatch =
-      (leave.id || "").toLowerCase().includes(search.toLowerCase()) ||
-      (leave.name || "").toLowerCase().includes(search.toLowerCase());
+      !query ||
+      String(leave.id || "").toLowerCase().includes(query) ||
+      String(leave.name || "").toLowerCase().includes(query);
 
     const leaveMatch =
       leaveFilter === "" || leave.leaveType === leaveFilter;

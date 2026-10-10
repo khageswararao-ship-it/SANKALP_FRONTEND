@@ -6,7 +6,7 @@ import {
   deletePayroll,
 } from "../../api/payrollApi";
 import { getEmployees } from "../../api/employeeApi";
-import { REAL_DEPARTMENTS } from "./Employees";
+import { REAL_DEPARTMENTS, DEPARTMENT_BASE_SALARIES } from "./Employees";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/layout.css";
@@ -38,7 +38,7 @@ function Payroll() {
     basicSalary: "",
     bonus: "0",
     netSalary: "",
-    month: "August 2026",
+    month: "October 2026",
     status: "Pending",
   });
 
@@ -76,15 +76,16 @@ function Payroll() {
 
     const deptEmployees = employeesList.filter((e) => e.department === initialDept);
     const firstEmp = deptEmployees[0] || employeesList[0];
+    const deptScale = DEPARTMENT_BASE_SALARIES[initialDept] || { base: 50000, bonus: 5000, total: 55000 };
 
     setNewPayroll({
       id: firstEmp ? firstEmp.id : "",
       name: firstEmp ? firstEmp.name : "",
       department: firstEmp ? (firstEmp.department || initialDept) : initialDept,
-      basicSalary: "35000",
-      bonus: "5000",
-      netSalary: "40000",
-      month: "August 2026",
+      basicSalary: String(deptScale.base),
+      bonus: String(deptScale.bonus),
+      netSalary: String(deptScale.total),
+      month: "October 2026",
       status: "Pending",
     });
 
@@ -95,6 +96,7 @@ function Payroll() {
     setSelectedDept(dept);
     const matchingEmployees = employeesList.filter((e) => e.department === dept);
     const chosenEmp = matchingEmployees[0];
+    const deptScale = DEPARTMENT_BASE_SALARIES[dept] || { base: 50000, bonus: 5000, total: 55000 };
 
     if (chosenEmp) {
       setNewPayroll((prev) => ({
@@ -102,6 +104,9 @@ function Payroll() {
         department: dept,
         id: chosenEmp.id,
         name: chosenEmp.name,
+        basicSalary: String(deptScale.base),
+        bonus: String(deptScale.bonus),
+        netSalary: String(deptScale.total),
       }));
     } else {
       setNewPayroll((prev) => ({
@@ -109,6 +114,9 @@ function Payroll() {
         department: dept,
         id: "",
         name: "",
+        basicSalary: String(deptScale.base),
+        bonus: String(deptScale.bonus),
+        netSalary: String(deptScale.total),
       }));
     }
   };
@@ -116,19 +124,26 @@ function Payroll() {
   const handleEmployeeSelect = (empId) => {
     const emp = employeesList.find((e) => e.id === empId);
     if (emp) {
+      const dept = emp.department || selectedDept || REAL_DEPARTMENTS[0];
+      const deptScale = DEPARTMENT_BASE_SALARIES[dept] || { base: 50000, bonus: 5000, total: 55000 };
       setNewPayroll((prev) => ({
         ...prev,
         id: emp.id,
         name: emp.name,
-        department: emp.department || selectedDept,
+        department: dept,
+        basicSalary: String(deptScale.base),
+        bonus: String(deptScale.bonus),
+        netSalary: String(deptScale.total),
       }));
     }
   };
 
   const filteredPayroll = payrollData.filter((payroll) => {
+    const query = (search || "").trim().toLowerCase();
     const searchMatch =
-      (payroll.id || "").toLowerCase().includes(search.toLowerCase()) ||
-      (payroll.name || "").toLowerCase().includes(search.toLowerCase());
+      !query ||
+      (payroll.id || "").toLowerCase().includes(query) ||
+      (payroll.name || "").toLowerCase().includes(query);
 
     const departmentMatch =
       departmentFilter === "" || payroll.department === departmentFilter;

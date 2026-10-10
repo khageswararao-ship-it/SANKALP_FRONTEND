@@ -25,6 +25,20 @@ export const REAL_DEPARTMENTS = [
   "Administration & Facilities",
 ];
 
+export const DEPARTMENT_BASE_SALARIES = {
+  "Engineering & Technology": { base: 75000, bonus: 10000, total: 85000 },
+  "Human Resources (HR)": { base: 50000, bonus: 5000, total: 55000 },
+  "Finance & Accounting": { base: 65000, bonus: 8000, total: 73000 },
+  "Sales & Business Development": { base: 55000, bonus: 15000, total: 70000 },
+  "Marketing & Communications": { base: 52000, bonus: 6000, total: 58000 },
+  "Operations & Logistics": { base: 48000, bonus: 4000, total: 52000 },
+  "Quality Assurance (QA)": { base: 58000, bonus: 6000, total: 64000 },
+  "Legal & Intellectual Property": { base: 80000, bonus: 10000, total: 90000 },
+  "Product Management": { base: 85000, bonus: 12000, total: 97000 },
+  "Customer Support & Success": { base: 42000, bonus: 4000, total: 46000 },
+  "Administration & Facilities": { base: 40000, bonus: 3000, total: 43000 },
+};
+
 function Employees() {
   const navigate = useNavigate();
   const tableRef = useRef(null);

@@ -38,43 +38,69 @@ const fetchEmployeeDashboard = async () => {
   }
 };
 
-const today = new Date();
+const [currentTime, setCurrentTime] = useState(
+  new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+);
 
+useEffect(() => {
+  const t = setInterval(() => {
+    setCurrentTime(
+      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+    );
+  }, 1000);
+  return () => clearInterval(t);
+}, []);
+
+const today = new Date();
 
   return (
     <div className="layout">
       <EmployeeSidebar activePage="Dashboard" />
 
       <div className="main-content">
-        <Header title="Employee Dashboard"profilePath="/employee/profile"notificationPath="/employee/notifications"/>
+        <Header title="Employee Dashboard" profilePath="/employee/profile" notificationPath="/employee/notifications" />
 
           <div className="page-content">
 
-            {/* Welcome Card */}
+            {/* Welcome Card with Live Time & Portal Status */}
             <div className="welcome-card">
 
                 <div
                 style={{
                 display:"flex",
-                justifyContent:"flex-end",
+                justifyContent:"space-between",
+                alignItems:"center",
+                flexWrap:"wrap",
+                gap:"10px",
                 marginBottom:"20px"
                 }}
                 >
+                  <div style={{ background: "rgba(30,136,229,0.12)", border: "1px solid rgba(30,136,229,0.3)", padding: "6px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: "700", color: "#1E88E5" }}>
+                    🕒 Live Clock: {currentTime}
+                  </div>
 
-                <button
-                className="add-btn"
-                onClick={()=>navigate("/employee/notifications")}
-                >
-                View All Notifications
-                </button>
-
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      className="add-btn"
+                      onClick={() => navigate("/employee/attendance")}
+                      style={{ background: "#10b981", boxShadow: "0 4px 12px rgba(16,185,129,0.35)" }}
+                    >
+                      📍 Attendance Check-In
+                    </button>
+                    <button
+                      className="action-btn"
+                      onClick={() => navigate("/employee/notifications")}
+                    >
+                      🔔 Notifications
+                    </button>
+                  </div>
                 </div>
 
 
               <div>
-                <h2>Welcome Back, {employee.name} 👋</h2>
-                <p>{employee.designation} | Employee ID: {employee.id}</p>
-                <p>Today's Status : Present</p>
+                <h2>Welcome Back, {employee.name || "Employee"} 👋</h2>
+                <p>{employee.designation || "Staff Member"} | Employee ID: <strong>{employee.id}</strong></p>
+                <p style={{ marginTop: "4px" }}>🏢 Department: <strong>{employee.department || "Corporate"}</strong></p>
               </div>
 
               <div className="welcome-date">

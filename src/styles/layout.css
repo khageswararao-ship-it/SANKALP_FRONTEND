@@ -261,7 +261,7 @@ body.dark-theme .page-content {
 body.dark-theme .header {
   background: rgba(15, 23, 42, 0.95);
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 body.dark-theme .header-title,
@@ -270,7 +270,27 @@ body.dark-theme .header h1 {
 }
 
 body.dark-theme .page-title {
-  color: #60a5fa !important;
+  color: #38bdf8 !important;
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+/* Universal Crisp Font Contrast in Dark Mode */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme strong,
+body.dark-theme b {
+  color: #ffffff !important;
+}
+
+body.dark-theme p,
+body.dark-theme span:not(.status):not(.status-badge),
+body.dark-theme label,
+body.dark-theme li {
+  color: #e2e8f0 !important;
 }
 
 body.dark-theme .card,
@@ -285,10 +305,18 @@ body.dark-theme .leave-form,
 body.dark-theme .payroll-card,
 body.dark-theme .profile-card,
 body.dark-theme .popup-form {
-  background: rgba(26, 38, 64, 0.96) !important;
+  background: rgba(15, 23, 42, 0.94) !important;
   color: #f8fafc !important;
-  border: 1px solid rgba(51, 65, 85, 0.8) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.12) !important;
+  transition: all 0.3s ease;
+}
+
+body.dark-theme .dashboard-card:hover,
+body.dark-theme .welcome-card:hover {
+  border-color: rgba(56, 189, 248, 0.7) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.3) !important;
+  transform: translateY(-3px);
 }
 
 body.dark-theme .card-info h2,
@@ -297,7 +325,7 @@ body.dark-theme .recent-card h3,
 body.dark-theme .welcome-card h2,
 body.dark-theme .dashboard-box h3,
 body.dark-theme .popup-form h2 {
-  color: #f8fafc !important;
+  color: #ffffff !important;
 }
 
 body.dark-theme .card-info h3,
@@ -317,55 +345,75 @@ body.dark-theme .leave-grid input,
 body.dark-theme .leave-grid select,
 body.dark-theme .leave-form textarea,
 body.dark-theme .profile-input {
-  background: #0f172a !important;
-  border-color: #334155 !important;
-  color: #f8fafc !important;
+  background: #090d16 !important;
+  border: 1px solid #334155 !important;
+  color: #ffffff !important;
+}
+
+body.dark-theme .search-box:focus,
+body.dark-theme .search-input:focus,
+body.dark-theme .filter-box:focus,
+body.dark-theme .popup-form input:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
 }
 
 body.dark-theme .employee-table td,
 body.dark-theme .admins-table td,
 body.dark-theme table td {
-  border-bottom: 1px solid #334155 !important;
-  color: #e2e8f0 !important;
+  border-bottom: 1px solid #1e293b !important;
+  color: #f1f5f9 !important;
 }
 
 body.dark-theme .employee-table tr:hover,
 body.dark-theme .admins-table tr:hover,
 body.dark-theme table tr:hover {
-  background: rgba(51, 65, 85, 0.35) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
 }
 
 body.dark-theme .table-container::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #090d16;
 }
 
 body.dark-theme .table-container::-webkit-scrollbar-thumb {
-  background: #3b82f6;
+  background: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
 body.dark-theme .profile-row {
-  border-bottom-color: #334155;
+  border-bottom-color: #1e293b;
 }
 
 body.dark-theme .profile-row strong {
-  color: #94a3b8;
+  color: #94a3b8 !important;
 }
 
 body.dark-theme .profile-row span {
-  color: #f8fafc;
+  color: #ffffff !important;
 }
 
 body.dark-theme .salary-row {
-  border-bottom-color: #334155;
-  color: #e2e8f0;
+  border-bottom-color: #1e293b;
+  color: #e2e8f0 !important;
 }
 
 body.dark-theme .salary-row.total {
-  color: #60a5fa;
+  color: #38bdf8 !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
 body.dark-theme .progress-bar {
-  background: #334155;
+  background: #1e293b;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+body.dark-theme .progress-fill {
+  background: linear-gradient(90deg, #10b981, #00f2fe) !important;
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+}
+
+body.dark-theme .add-btn {
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
 }
 
 /* ==========================================================================

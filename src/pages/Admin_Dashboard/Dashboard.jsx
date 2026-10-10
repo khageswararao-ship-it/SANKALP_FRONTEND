@@ -178,33 +178,114 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Robust True Solid Pie Chart */}
-              <div style={{ width: "100%", height: "290px", minHeight: "290px", position: "relative" }}>
-                <ResponsiveContainer width="100%" height={290} minHeight={290}>
-                  <PieChart>
-                    <Pie
-                      data={attendanceChartData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      innerRadius={0}
-                      paddingAngle={attendanceChartData.length > 1 ? 2 : 0}
-                      stroke="#ffffff"
-                      strokeWidth={2}
-                      isAnimationActive={true}
-                      animationDuration={900}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {attendanceChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value, name) => [`${value} Employee(s)`, name]} />
-                    <Legend verticalAlign="bottom" height={36} />
-                  </PieChart>
-                </ResponsiveContainer>
+              {/* Robust Responsive SVG Attendance Donut & Multi-Status Visualizer */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "24px", alignItems: "center", width: "100%", margin: "10px 0" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "30px", width: "100%" }}>
+                  {/* Custom SVG Donut Gauge */}
+                  <div style={{ position: "relative", width: "210px", height: "210px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <svg width="210" height="210" viewBox="0 0 210 210" style={{ transform: "rotate(-90deg)", filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.15))" }}>
+                      <circle
+                        cx="105"
+                        cy="105"
+                        r="80"
+                        fill="transparent"
+                        stroke="rgba(148, 163, 184, 0.2)"
+                        strokeWidth="24"
+                      />
+                      {/* Present segment */}
+                      <circle
+                        cx="105"
+                        cy="105"
+                        r="80"
+                        fill="transparent"
+                        stroke="#10b981"
+                        strokeWidth="24"
+                        strokeDasharray={502.65}
+                        strokeDashoffset={502.65 - (502.65 * (attendanceCounts.total > 0 ? attendanceCounts.present / attendanceCounts.total : (employees > 0 ? 1 : 0)))}
+                        strokeLinecap="round"
+                        style={{ transition: "stroke-dashoffset 1s ease" }}
+                      />
+                      {/* Late segment */}
+                      {attendanceCounts.late > 0 && (
+                        <circle
+                          cx="105"
+                          cy="105"
+                          r="80"
+                          fill="transparent"
+                          stroke="#f59e0b"
+                          strokeWidth="24"
+                          strokeDasharray={502.65}
+                          strokeDashoffset={502.65 - (502.65 * (attendanceCounts.late / attendanceCounts.total))}
+                          strokeLinecap="round"
+                          style={{ transition: "stroke-dashoffset 1s ease" }}
+                        />
+                      )}
+                    </svg>
+                    <div style={{ position: "absolute", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <span style={{ fontSize: "28px", fontWeight: "800", color: "#10b981", lineHeight: 1 }}>
+                        {attendancePercent}%
+                      </span>
+                      <span style={{ fontSize: "11px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "1px", marginTop: "4px" }}>
+                        Attendance
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Multi-Status Distribution Meters */}
+                  <div style={{ flex: "1", minWidth: "260px", maxWidth: "420px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {/* Present */}
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: "600", marginBottom: "4px" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#10b981" }}>
+                          <FaCheckCircle /> Present
+                        </span>
+                        <span>{attendanceCounts.present} ({attendanceCounts.total > 0 ? Math.round((attendanceCounts.present / attendanceCounts.total) * 100) : 0}%)</span>
+                      </div>
+                      <div style={{ width: "100%", height: "8px", background: "rgba(16,185,129,0.15)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ width: `${attendanceCounts.total > 0 ? (attendanceCounts.present / attendanceCounts.total) * 100 : 0}%`, height: "100%", background: "#10b981", borderRadius: "4px", transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+
+                    {/* Late */}
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: "600", marginBottom: "4px" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#f59e0b" }}>
+                          <FaClock /> Late Arrivals
+                        </span>
+                        <span>{attendanceCounts.late} ({attendanceCounts.total > 0 ? Math.round((attendanceCounts.late / attendanceCounts.total) * 100) : 0}%)</span>
+                      </div>
+                      <div style={{ width: "100%", height: "8px", background: "rgba(245,158,11,0.15)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ width: `${attendanceCounts.total > 0 ? (attendanceCounts.late / attendanceCounts.total) * 100 : 0}%`, height: "100%", background: "#f59e0b", borderRadius: "4px", transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+
+                    {/* Absent */}
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: "600", marginBottom: "4px" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ef4444" }}>
+                          <FaTimesCircle /> Absent
+                        </span>
+                        <span>{attendanceCounts.absent} ({attendanceCounts.total > 0 ? Math.round((attendanceCounts.absent / attendanceCounts.total) * 100) : 0}%)</span>
+                      </div>
+                      <div style={{ width: "100%", height: "8px", background: "rgba(239,68,68,0.15)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ width: `${attendanceCounts.total > 0 ? (attendanceCounts.absent / attendanceCounts.total) * 100 : 0}%`, height: "100%", background: "#ef4444", borderRadius: "4px", transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+
+                    {/* Leave */}
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: "600", marginBottom: "4px" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#6366f1" }}>
+                          <FaCalendarAlt /> On Leave
+                        </span>
+                        <span>{attendanceCounts.leave} ({attendanceCounts.total > 0 ? Math.round((attendanceCounts.leave / attendanceCounts.total) * 100) : 0}%)</span>
+                      </div>
+                      <div style={{ width: "100%", height: "8px", background: "rgba(99,102,241,0.15)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ width: `${attendanceCounts.total > 0 ? (attendanceCounts.leave / attendanceCounts.total) * 100 : 0}%`, height: "100%", background: "#6366f1", borderRadius: "4px", transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Quick Summary Bar */}
