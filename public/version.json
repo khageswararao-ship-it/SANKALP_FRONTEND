@@ -1,20 +1,15 @@
 {
-  "version": "1.2.3",
-  "build": 12,
+  "version": "1.2.4",
+  "build": 13,
   "releaseDate": "2026-10-10",
-  "title": "Sankalp_IP HRMS v1.2.3 Pro Edition",
-  "description": "Department Broadcast Notifications, Live Attendance Clock with Seconds, 09:30 AM Cutoff Timing, Fixed Corporate Salary Standard, Resilient Password Reset, and Cyber-Neon Dark Mode.",
+  "title": "Sankalp_IP HRMS v1.2.4 Pro Edition",
+  "description": "Seamless Login with Registered Email (Forgot Username), Admin Profile Full Responsive Slidebar matching Employees with prominent blue track, and Cyber-Neon Light & Dark UI polish.",
   "releaseNotes": [
-    "Resilient Password Reset with fallback resolving 500 error when mail server is offline",
-    "Department-wide broadcast notifications and individual employee target selections",
-    "Live Attendance timestamp with date, time, and seconds (HH:MM:SS AM/PM)",
-    "Automatic attendance rule: <= 09:30 AM Present, > 09:30 AM Late, with 24-hr cycle lock",
-    "Removed check-out/outing time to streamline daily attendance check-in",
-    "Bulletproof SVG animated Donut and Attendance status distribution meters on mobile and PC",
-    "Fixed standard corporate base salaries mapped across all 11 departments",
-    "Character-by-character real-time search filtering across all tables",
-    "Interactive slidebars under tables for seamless mobile and desktop scrolling",
-    "Cyber-neon dark theme polish with high-contrast readable typography and glowing accents"
+    "Fixed Admin Profile slidebar cut-off with full responsive fit, non-clipping controller buttons, and matching prominent cyan-blue scroll track",
+    "Enabled login with registered email address and password for both Employees and Administrators who forgot their username",
+    "Enhanced Light Mode with vibrant Cyber-Neon glowing card borders, luminous button aura, and energetic cyan accents",
+    "Maintained 100% brand integrity with all existing logos, images, icons, and backgrounds untouched",
+    "Optimized mobile touch navigation and responsive table scrollbars across all administrative and employee views"
   ],
   "forceUpdate": false,
   "downloadUrl": "https://github.com/khageswararao-ship-it/SANKALP_FRONTEND/releases/latest"

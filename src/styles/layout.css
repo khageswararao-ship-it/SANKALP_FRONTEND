@@ -436,28 +436,65 @@ body.dark-theme .add-btn {
   }
 }
 
-/* Card Hover Elevation and Glass Shimmer */
+/* Card Hover Elevation, Neon Accents and Glass Shimmer */
+.card,
 .dashboard-card,
 .chart-card,
 .settings-card,
 .profile-card,
 .leave-card,
 .attendance-summary-card,
-.stat-card {
+.stat-card,
+.table-container {
+  border: 1px solid rgba(14, 165, 233, 0.22) !important;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   will-change: transform, box-shadow;
 }
 
+.card:hover,
 .dashboard-card:hover,
 .chart-card:hover,
 .settings-card:hover,
 .profile-card:hover,
 .leave-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12) !important;
+  border-color: rgba(14, 165, 233, 0.55) !important;
+  box-shadow: 0 12px 30px rgba(14, 165, 233, 0.18), 0 0 16px rgba(56, 189, 248, 0.3) !important;
 }
 
-/* Interactive Button Hover & Click Ripple */
+/* Header Neon Accent in Light Mode */
+.header {
+  border-bottom: 2px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 2px 14px rgba(14, 165, 233, 0.1);
+}
+
+/* Light Mode Input Neon Focus */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 0 12px rgba(14, 165, 233, 0.2) !important;
+}
+
+/* Universal Table Scrollbar (Glowing Cyan-Blue) */
+.table-container::-webkit-scrollbar {
+  height: 8px !important;
+  display: block !important;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 4px !important;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #38bdf8, #1E88E5) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6) !important;
+}
+
+/* Interactive Button Hover & Click Ripple with Neon Glow */
 .add-btn,
 .delete-btn,
 .action-btn,
@@ -469,11 +506,19 @@ body.dark-theme .add-btn {
   overflow: hidden;
 }
 
+.add-btn,
+.add-admin-btn,
+.setting-btn,
+.table-slide-btn {
+  box-shadow: 0 4px 14px rgba(30, 136, 229, 0.35), 0 0 8px rgba(56, 189, 248, 0.25) !important;
+}
+
 .add-btn:hover,
 .add-admin-btn:hover,
-.setting-btn:hover {
+.setting-btn:hover,
+.table-slide-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(30, 136, 229, 0.35);
+  box-shadow: 0 6px 18px rgba(30, 136, 229, 0.45), 0 0 14px rgba(56, 189, 248, 0.45) !important;
 }
 
 .add-btn:active,

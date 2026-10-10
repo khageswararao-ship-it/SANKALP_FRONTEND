@@ -19,9 +19,9 @@
     padding: 35px 30px;
     border-radius: 18px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 0 22px rgba(56, 189, 248, 0.25);
     box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(56, 189, 248, 0.45);
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -136,7 +136,7 @@
     width: 100%;
     padding: 13px;
     border: none;
-    background: #1e3a8a;
+    background: linear-gradient(135deg, #1E88E5, #1e3a8a);
     color: white;
     border-radius: 10px;
     font-size: 16px;
@@ -146,13 +146,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+    box-shadow: 0 4px 14px rgba(30, 136, 229, 0.4), 0 0 10px rgba(56, 189, 248, 0.35);
 }
 
 .login-submit-btn:hover:not(:disabled) {
-    background: #1E88E5;
+    background: linear-gradient(135deg, #1565C0, #1E88E5);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.4);
+    box-shadow: 0 6px 18px rgba(30, 136, 229, 0.55), 0 0 16px rgba(56, 189, 248, 0.5);
 }
 
 .login-submit-btn:disabled {

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import background from "../assets/background.png";
 import "../styles/login.css";
-import { loginUser } from "../api/loginApi";
+import { loginUser, getAllLogins } from "../api/loginApi";
 import { sendOtp } from "../api/otpApi";
 import { API_BASE_URL } from "../api/apiConfig";
 import AboutModal from "../components/AboutModal";
@@ -35,9 +35,9 @@ function Login() {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // Instant client-side validation
-    if (!username.trim() || !password.trim()) {
-      setErrorMessage("Please enter both username and password.");
+    const inputCredential = username.trim();
+    if (!inputCredential || !password.trim()) {
+      setErrorMessage("Please enter both Username/Email and Password.");
       return;
     }
 
@@ -50,18 +50,72 @@ function Login() {
     }, 2500);
 
     try {
-      const user = await loginUser({
-        username: username.trim(),
-        password: password,
-        role: role.toUpperCase(),
-      });
+      let resolvedUsername = inputCredential;
+      let effectiveRole = role.toUpperCase();
+
+      // Support "Forgot Username": allow login via registered email address
+      if (inputCredential.includes("@")) {
+        try {
+          const res = await getAllLogins();
+          const allUsers = Array.isArray(res.data) ? res.data : [];
+          const matched = allUsers.find(
+            (u) =>
+              u.email &&
+              u.email.trim().toLowerCase() === inputCredential.toLowerCase()
+          );
+          if (matched && matched.username) {
+            resolvedUsername = matched.username;
+            if (matched.role) {
+              effectiveRole = matched.role.toUpperCase();
+              setRole(matched.role.toLowerCase());
+            }
+          }
+        } catch (fetchErr) {
+          console.warn("Could not query logins for email resolution:", fetchErr);
+        }
+      }
+
+      // Authenticate with resolved username and password
+      let user = null;
+      try {
+        user = await loginUser({
+          username: resolvedUsername,
+          password: password,
+          role: effectiveRole,
+        });
+      } catch (authErr) {
+        // Fallback: If initial authentication failed and user didn't have '@',
+        // check if their input matches any registered email or employee ID
+        try {
+          const res = await getAllLogins();
+          const allUsers = Array.isArray(res.data) ? res.data : [];
+          const matched = allUsers.find(
+            (u) =>
+              (u.email && u.email.trim().toLowerCase() === inputCredential.toLowerCase()) ||
+              (u.employeeId && u.employeeId.trim().toLowerCase() === inputCredential.toLowerCase())
+          );
+          if (matched && matched.username && matched.username !== resolvedUsername) {
+            resolvedUsername = matched.username;
+            effectiveRole = matched.role ? matched.role.toUpperCase() : effectiveRole;
+            user = await loginUser({
+              username: resolvedUsername,
+              password: password,
+              role: effectiveRole,
+            });
+          } else {
+            throw authErr;
+          }
+        } catch (innerErr) {
+          throw authErr;
+        }
+      }
 
       clearTimeout(wakeUpTimer);
       setServerWakingUp(false);
 
       if (!user || !user.role) {
         setIsLoading(false);
-        setErrorMessage("Invalid Username or Password. Please check your credentials.");
+        setErrorMessage("Invalid Username/Email or Password. Please check your credentials.");
         return;
       }
 
@@ -89,7 +143,7 @@ function Login() {
       setServerWakingUp(false);
       setIsLoading(false);
       console.error("Login Error:", error);
-      setErrorMessage("Server error or connection timed out. Please try again.");
+      setErrorMessage("Invalid Username/Email or Password. Please try again.");
     }
   };
 
@@ -163,7 +217,7 @@ function Login() {
 
           <input
             type="text"
-            placeholder="Username"
+            placeholder="Username or Registered Email"
             value={username}
             disabled={isLoading}
             autoComplete="username"
@@ -172,6 +226,9 @@ function Login() {
               setErrorMessage("");
             }}
           />
+          <div style={{ fontSize: "11.5px", color: "#64748b", marginTop: "-8px", marginBottom: "14px", textAlign: "left", paddingLeft: "4px" }}>
+            💡 <em>Forgot username? Enter your registered email to log in.</em>
+          </div>
 
           <div style={{ position: "relative", width: "100%", marginBottom: "15px" }}>
             <input

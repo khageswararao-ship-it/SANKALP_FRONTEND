@@ -511,8 +511,8 @@ function Profile() {
             </div>
 
             {/* Responsive Touch-Friendly Slidebar Container */}
-            <div className="table-container mobile-slidebar-container" ref={adminsTableRef}>
-              <table className="employee-table admins-table" style={{ minWidth: "800px", width: "100%" }}>
+            <div className="table-container" ref={adminsTableRef} style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", width: "100%" }}>
+              <table className="employee-table admins-table" style={{ minWidth: "680px", width: "100%" }}>
                 <thead>
                   <tr>
                     <th>Admin ID</th>
@@ -610,7 +610,7 @@ function Profile() {
               </button>
               <div className="table-slide-track">
                 <span className="table-slide-text">
-                  👉 Touch & slide table or use buttons to view all Admin columns 👈
+                  👈 Touch & slide table or use buttons 👉
                 </span>
               </div>
               <button

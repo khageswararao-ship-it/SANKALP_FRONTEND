@@ -1,6 +1,6 @@
 // Application Version and Release Configuration
-export const APP_VERSION = "1.2.3";
-export const BUILD_NUMBER = 12;
+export const APP_VERSION = "1.2.4";
+export const BUILD_NUMBER = 13;
 export const BUILD_DATE = "2026-10-10";
 export const APP_NAME = "Sankalp_IP HRMS";
 export const DEVELOPER_NAME = "Ravada Khageswar Rao";
