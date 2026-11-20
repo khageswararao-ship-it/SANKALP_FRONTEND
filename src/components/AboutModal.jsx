@@ -1,5 +1,15 @@
 import React from "react";
-import { FaTimes, FaUserCheck, FaCode, FaServer, FaMobileAlt, FaShieldAlt, FaSyncAlt } from "react-icons/fa";
+import {
+  FaTimes,
+  FaUserCheck,
+  FaCode,
+  FaServer,
+  FaMobileAlt,
+  FaShieldAlt,
+  FaSyncAlt,
+  FaGithub,
+  FaLinkedin,
+} from "react-icons/fa";
 import logo from "../assets/logo.svg";
 import { APP_VERSION, BUILD_NUMBER, DEVELOPER_NAME } from "../config/version";
 
@@ -20,7 +30,7 @@ function AboutModal({ isOpen, onClose }) {
         style={{
           maxWidth: "540px",
           width: "92vw",
-          padding: "28px",
+          padding: "26px",
           borderRadius: "16px",
           position: "relative",
         }}
@@ -47,22 +57,22 @@ function AboutModal({ isOpen, onClose }) {
           <FaTimes />
         </button>
 
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ textAlign: "center", marginBottom: "18px" }}>
           <img
             src={logo}
             alt="Sankalp IP Logo"
-            style={{ width: "70px", height: "70px", objectFit: "contain", marginBottom: "8px" }}
+            style={{ width: "65px", height: "65px", objectFit: "contain", marginBottom: "6px" }}
           />
-          <h2 style={{ margin: "4px 0", color: "#1E88E5", fontSize: "24px" }}>
+          <h2 style={{ margin: "2px 0", color: "#1E88E5", fontSize: "22px" }}>
             Sankalp IP HRMS
           </h2>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "6px" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "4px" }}>
             <span
               style={{
                 fontSize: "12px",
                 background: "rgba(30,136,229,0.12)",
                 color: "#1E88E5",
-                padding: "4px 10px",
+                padding: "3px 10px",
                 borderRadius: "20px",
                 fontWeight: 600,
               }}
@@ -72,31 +82,92 @@ function AboutModal({ isOpen, onClose }) {
           </div>
         </div>
 
+        {/* Developer Profile Card with User Headshot */}
         <div
           style={{
             background: "rgba(30,136,229,0.06)",
-            border: "1px solid rgba(30,136,229,0.2)",
-            borderRadius: "12px",
-            padding: "16px",
-            marginBottom: "18px",
+            border: "1px solid rgba(30,136,229,0.22)",
+            borderRadius: "14px",
+            padding: "14px",
+            marginBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
           }}
         >
-          <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", display: "flex", alignItems: "center", gap: "8px" }}>
-            <FaUserCheck color="#1E88E5" /> Developer & Architect
-          </h4>
-          <p style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: "700", color: "#1E3A8A" }}>
-            {DEVELOPER_NAME}
-          </p>
-          <p style={{ margin: "0", fontSize: "13px", color: "#64748b" }}>
-            Lead Full-Stack Developer & Mobile Engineer
-          </p>
+          <img
+            src="/author-photo.jpg"
+            alt={DEVELOPER_NAME}
+            style={{
+              width: "68px",
+              height: "68px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "3px solid #1E88E5",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              flexShrink: 0,
+            }}
+          />
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: "0 0 2px 0", color: "#0f172a", fontSize: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <FaUserCheck color="#1E88E5" /> Developer & Architect
+            </h4>
+            <p style={{ margin: "0 0 2px 0", fontSize: "16px", fontWeight: "700", color: "#1E3A8A" }}>
+              {DEVELOPER_NAME}
+            </p>
+            <p style={{ margin: "0 0 8px 0", fontSize: "12.5px", color: "#64748b" }}>
+              Lead Full-Stack Developer & Mobile Engineer
+            </p>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <a
+                href="https://github.com/khageswararao-ship-it"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  fontSize: "12px",
+                  color: "#0f172a",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                  background: "#f1f5f9",
+                  padding: "4px 10px",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                }}
+              >
+                <FaGithub /> GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/khageswararao"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  fontSize: "12px",
+                  color: "#0a66c2",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                  background: "#e0f2fe",
+                  padding: "4px 10px",
+                  borderRadius: "6px",
+                  border: "1px solid #bae6fd",
+                }}
+              >
+                <FaLinkedin /> LinkedIn
+              </a>
+            </div>
+          </div>
         </div>
 
-        <div style={{ fontSize: "14px", color: "#334155", lineHeight: "1.6", marginBottom: "18px" }}>
+        <div style={{ fontSize: "13.5px", color: "#334155", lineHeight: "1.55", marginBottom: "16px" }}>
           <p style={{ margin: "0 0 10px 0" }}>
             <strong>About This App:</strong> Sankalp IP HRMS is an all-in-one Human Resource Management System engineered to streamline organizational workforce operations. It provides role-based portal access for both Administrators and Employees.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", fontSize: "13px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", fontSize: "12.5px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <FaCode color="#1E88E5" /> <span>React 18 & Vite</span>
             </div>
@@ -113,7 +184,7 @@ function AboutModal({ isOpen, onClose }) {
         </div>
 
         {/* Check for Updates Action */}
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
           <button
             type="button"
             onClick={handleCheckUpdates}
@@ -121,8 +192,8 @@ function AboutModal({ isOpen, onClose }) {
               background: "#f1f5f9",
               border: "1px solid #cbd5e1",
               borderRadius: "8px",
-              padding: "9px 18px",
-              fontSize: "13.5px",
+              padding: "8px 16px",
+              fontSize: "13px",
               fontWeight: "600",
               color: "#1e293b",
               cursor: "pointer",
@@ -136,7 +207,7 @@ function AboutModal({ isOpen, onClose }) {
           </button>
         </div>
 
-        <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "14px", textAlign: "center" }}>
+        <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "12px", textAlign: "center" }}>
           <p style={{ margin: "0", fontSize: "12px", color: "#94a3b8" }}>
             © {new Date().getFullYear()} Sankalp IP. Built with pride by {DEVELOPER_NAME}.
           </p>
