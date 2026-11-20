@@ -9,6 +9,7 @@ import {
   FaSyncAlt,
   FaGithub,
   FaLinkedin,
+  FaBirthdayCake,
 } from "react-icons/fa";
 import logo from "../assets/logo.svg";
 import { APP_VERSION, BUILD_NUMBER, DEVELOPER_NAME } from "../config/version";
@@ -20,6 +21,17 @@ function AboutModal({ isOpen, onClose }) {
     if (typeof window.checkForAppUpdates === "function") {
       window.checkForAppUpdates(true);
     }
+  };
+
+  const calculateAge = () => {
+    const birth = new Date(2007, 11, 24);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
   };
 
   return (
@@ -82,7 +94,7 @@ function AboutModal({ isOpen, onClose }) {
           </div>
         </div>
 
-        {/* Developer Profile Card with User Headshot */}
+        {/* Developer Profile Card with User Headshot and Auto Age */}
         <div
           style={{
             background: "rgba(30,136,229,0.06)",
@@ -99,8 +111,8 @@ function AboutModal({ isOpen, onClose }) {
             src="/author-photo.jpg"
             alt={DEVELOPER_NAME}
             style={{
-              width: "68px",
-              height: "68px",
+              width: "72px",
+              height: "72px",
               borderRadius: "50%",
               objectFit: "cover",
               border: "3px solid #1E88E5",
@@ -115,10 +127,10 @@ function AboutModal({ isOpen, onClose }) {
             <p style={{ margin: "0 0 2px 0", fontSize: "16px", fontWeight: "700", color: "#1E3A8A" }}>
               {DEVELOPER_NAME}
             </p>
-            <p style={{ margin: "0 0 8px 0", fontSize: "12.5px", color: "#64748b" }}>
-              Lead Full-Stack Developer & Mobile Engineer
+            <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "#475569", display: "flex", alignItems: "center", gap: "5px" }}>
+              <FaBirthdayCake color="#e11d48" /> Age: <strong>{calculateAge()}</strong> (24 Dec 2007)
             </p>
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "6px" }}>
               <a
                 href="https://github.com/khageswararao-ship-it"
                 target="_blank"

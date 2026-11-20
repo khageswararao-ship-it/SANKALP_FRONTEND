@@ -19,8 +19,8 @@
     <!-- Primary Search Engine Optimization (SEO) Meta Tags -->
     <title>Ravada Khageswar Rao | Sankalp IP HRMS Official Portal & Developer Portfolio</title>
     <meta name="title" content="Ravada Khageswar Rao | Sankalp IP HRMS Official Portal & Developer Portfolio" />
-    <meta name="description" content="Official website, developer portfolio, and HRMS platform engineered by Ravada Khageswar Rao. Access Sankalp IP HRMS enterprise workforce management, GitHub, and professional profiles." />
-    <meta name="keywords" content="Ravada Khageswar Rao, Khageswar Rao, Ravada Khageswarrao, Khageswar, Ravada, Sankalp IP, Sankalp_IP, Sankalp IP HRMS, Sankalp HRMS, Ravada Khageswar Rao Developer, Ravada Khageswar Rao LinkedIn, Ravada Khageswar Rao GitHub, Lead System Architect, Software Engineer" />
+    <meta name="description" content="Official website, developer portfolio, and HRMS platform engineered by Ravada Khageswar Rao (born 24 Dec 2007). Access Sankalp IP HRMS enterprise workforce management, GitHub, and professional profiles." />
+    <meta name="keywords" content="Ravada Khageswar Rao, Khageswar Rao, Ravada Khageswarrao, Khageswar, Ravada, Ravada Khageswar Rao age, Ravada Khageswar Rao birthday, Sankalp IP, Sankalp_IP, Sankalp IP HRMS, Sankalp HRMS, Ravada Khageswar Rao Developer, Ravada Khageswar Rao LinkedIn, Ravada Khageswar Rao GitHub, Lead System Architect, Software Engineer" />
     <meta name="author" content="Ravada Khageswar Rao" />
     <meta name="creator" content="Ravada Khageswar Rao" />
     <meta name="publisher" content="Ravada Khageswar Rao" />
@@ -78,8 +78,13 @@
             "Khageswar",
             "Khageswararao"
           ],
+          "birthDate": "2007-12-24",
+          "nationality": {
+            "@type": "Country",
+            "name": "India"
+          },
           "jobTitle": "Lead Software Developer & System Architect",
-          "description": "Software engineer and creator of Sankalp IP HRMS. Specializing in full-stack web and mobile application engineering, enterprise workforce platforms, and scalable cloud architectures.",
+          "description": "Software engineer and creator of Sankalp IP HRMS (born 24 December 2007). Specializing in full-stack web and mobile application engineering, enterprise workforce platforms, and scalable cloud architectures.",
           "url": "https://sankalp-frontend-kohl.vercel.app/",
           "image": "https://sankalp-frontend-kohl.vercel.app/author-photo.jpg",
           "sameAs": [
@@ -130,6 +135,7 @@
           <p>Official website and portal of <strong>Sankalp IP HRMS</strong>, an enterprise workforce management system architected and engineered by <strong>Ravada Khageswar Rao</strong>.</p>
           <ul style="margin: 16px 0 20px 20px;">
             <li><strong>Developer:</strong> Ravada Khageswar Rao</li>
+            <li><strong>Date of Birth:</strong> 24 December 2007 (<span id="crawlerAge">18</span> years old)</li>
             <li><strong>Application:</strong> Sankalp IP HRMS (Web & Android Application)</li>
             <li><strong>GitHub:</strong> <a href="https://github.com/khageswararao-ship-it" target="_blank" rel="noopener noreferrer">github.com/khageswararao-ship-it</a></li>
             <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/khageswararao" target="_blank" rel="noopener noreferrer">linkedin.com/in/khageswararao</a></li>
@@ -137,6 +143,21 @@
         </main>
       </div>
     </div>
+    <script>
+      (function() {
+        try {
+          var birth = new Date(2007, 11, 24);
+          var today = new Date();
+          var age = today.getFullYear() - birth.getFullYear();
+          var m = today.getMonth() - birth.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            age--;
+          }
+          var el = document.getElementById("crawlerAge");
+          if (el) el.textContent = age;
+        } catch(e) {}
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
